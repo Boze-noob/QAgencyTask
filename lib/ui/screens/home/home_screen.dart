@@ -10,21 +10,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  double leftPadding = 20;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: EdgeInsets.only(left: leftPadding),
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 24,
+            height: 24,
+          ),
+        ),
+      ),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: PopularList(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 0,
         unselectedFontSize: 0,
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() {
-          print("Index $index");
           _selectedIndex = index;
         }),
         items: [
           bottomNavBarItem("assets/icons/movies.png", "Movies", context),
-          bottomNavBarItem("assets/icons/favourites.png", "Favourites", context)
+          bottomNavBarItem("assets/icons/favourite_selected.png", "Favourites", context)
         ],
       ),
     );
@@ -63,8 +78,10 @@ BottomNavigationBarItem bottomNavBarItem(String iconPath, String title, BuildCon
           Divider(
             height: 2,
             thickness: 2,
-            indent: 38, //38px from left side
-            endIndent: 38, //38px from right side
+            indent: 38,
+            //38px from left side
+            endIndent: 38,
+            //38px from right side
             color: context.appTheme.theme.primaryColor,
           ),
           Row(
