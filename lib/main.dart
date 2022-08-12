@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '_all.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
   runApp(const MyApp());
 }
 
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
             OverlayEntry(
               builder: (context) => AppTheme(
                 appTheme: AppTheme.light,
-                child: const Material(child: HomeScreen()),
+                child: const Material(child: MovieDetailsScreen()),
               ),
             ),
           ],
