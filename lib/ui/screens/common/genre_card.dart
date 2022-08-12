@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:q_agency_task/_all.dart';
 
 class GenreCard extends StatelessWidget {
   String title = "";
