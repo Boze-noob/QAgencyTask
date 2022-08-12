@@ -96,17 +96,24 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: IconButton(
-        iconSize: 24,
-        onPressed: () => {
-          setState(() {
-            _isSelected = !_isSelected;
-          })
-        },
-        icon: Image.asset(
-            _isSelected == true ? "assets/icons/favourite_selected_fill.png" : "assets/icons/favourite_unselected.png"),
+    return SizedBox(
+      width: 24,
+      child: Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
+          alignment: Alignment.topRight,
+          color: Colors.red,
+          iconSize: 24,
+          padding: EdgeInsets.zero,
+          onPressed: () => {
+            setState(() {
+              _isSelected = !_isSelected;
+            })
+          },
+          icon: Image.asset(_isSelected == true
+              ? "assets/icons/favourite_selected_fill.png"
+              : "assets/icons/favourite_unselected.png"),
+        ),
       ),
     );
   }

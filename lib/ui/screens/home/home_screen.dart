@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: PopularList(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: _selectedIndex == 0 ? const PopularList() : const FavouritesList(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 0,
