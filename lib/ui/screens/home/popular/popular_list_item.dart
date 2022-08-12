@@ -17,29 +17,21 @@ class _PopularListItemState extends State<PopularListItem> {
         height: 100,
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          children: const [MovieImage(), Expanded(child: Details()), ActionIcon()],
+          children: [
+            MovieImage(
+              imageUrl: "https://picsum.photos/250?image=9",
+            ),
+            const Expanded(child: _Details()),
+            const _FavouriteIcon()
+          ],
         ),
       ),
     );
   }
 }
 
-class MovieImage extends StatelessWidget {
-  const MovieImage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.network(
-      "https://picsum.photos/250?image=9",
-      width: 100,
-      height: 100,
-      fit: BoxFit.cover,
-    );
-  }
-}
-
-class Details extends StatelessWidget {
-  const Details({Key? key}) : super(key: key);
+class _Details extends StatelessWidget {
+  const _Details({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +72,9 @@ class Details extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: 3,
                   itemBuilder: (_, index) {
-                    return const GenreCard();
+                    return GenreCard(
+                      title: 'Comedy',
+                    );
                   }),
             ),
           )
@@ -90,14 +84,14 @@ class Details extends StatelessWidget {
   }
 }
 
-class ActionIcon extends StatefulWidget {
-  const ActionIcon({Key? key}) : super(key: key);
+class _FavouriteIcon extends StatefulWidget {
+  const _FavouriteIcon({Key? key}) : super(key: key);
 
   @override
-  State<ActionIcon> createState() => _ActionIconState();
+  State<_FavouriteIcon> createState() => _FavouriteIconState();
 }
 
-class _ActionIconState extends State<ActionIcon> {
+class _FavouriteIconState extends State<_FavouriteIcon> {
   bool _isSelected = false;
 
   @override
@@ -114,27 +108,6 @@ class _ActionIconState extends State<ActionIcon> {
         icon: Image.asset(
             _isSelected == true ? "assets/icons/favourite_selected_fill.png" : "assets/icons/favourite_unselected.png"),
       ),
-    );
-  }
-}
-
-class GenreCard extends StatelessWidget {
-  const GenreCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: const [
-        Card(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-            child: Text(
-              "Comedy",
-              style: TextStyle(fontSize: 11),
-            ),
-          ),
-        )
-      ],
     );
   }
 }
