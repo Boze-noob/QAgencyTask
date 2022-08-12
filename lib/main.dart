@@ -16,9 +16,15 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light.theme,
       darkTheme: AppTheme.dark.theme,
       builder: (context, child) {
-        return AppTheme(
-          appTheme: AppTheme.light,
-          child: const Material(child: SplashScreen()),
+        return Overlay(
+          initialEntries: [
+            OverlayEntry(
+              builder: (context) => AppTheme(
+                appTheme: AppTheme.light,
+                child: const Material(child: HomeScreen()),
+              ),
+            ),
+          ],
         );
       },
       debugShowCheckedModeBanner: false,

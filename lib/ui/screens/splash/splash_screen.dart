@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget {
       width: context.screenWidth,
       height: context.screenHeight,
       alignment: Alignment.center,
-      color: context.appTheme.theme.primaryColor,
+      color: context.appTheme.theme.backgroundColor,
       child: Image.asset('assets/images/logo.png'),
     );
   }
