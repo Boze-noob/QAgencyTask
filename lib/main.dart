@@ -1,35 +1,42 @@
 import 'package:flutter/material.dart';
 import '_all.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final ServiceProvider serviceProvider = await resolveServiceProviderFromEnvironment();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
-  runApp(const MyApp());
+  runApp(MyApp(
+    serviceProvider: serviceProvider,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final ServiceProvider serviceProvider;
+  const MyApp({Key? key, required this.serviceProvider}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: AppTheme.light.theme,
-      darkTheme: AppTheme.dark.theme,
-      builder: (context, child) {
-        return Overlay(
-          initialEntries: [
-            OverlayEntry(
-              builder: (context) => AppTheme(
-                appTheme: AppTheme.light,
-                child: const Material(child: MovieDetailsScreen()),
+    return RepositoryProvider(
+      create: (context) => serviceProvider,
+      child: MaterialApp(
+        title: 'Q agency task',
+        theme: AppTheme.light.theme,
+        darkTheme: AppTheme.dark.theme,
+        builder: (context, child) {
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (context) => AppTheme(
+                  appTheme: AppTheme.light,
+                  child: const ContextServiceProviderBlocs(child: Material(child: MovieDetailsScreen())),
+                ),
               ),
-            ),
-          ],
-        );
-      },
-      debugShowCheckedModeBanner: false,
+            ],
+          );
+        },
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
