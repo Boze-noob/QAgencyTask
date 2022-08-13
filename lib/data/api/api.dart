@@ -12,8 +12,8 @@ class ApiImpl implements Api {
   @override
   Future<Result> get(String path) async {
     try {
-      final result = dio.get(path);
-      return Result(data: result);
+      final result = await dio.get(path);
+      return Result(data: json.decode(result.toString()));
     } on DioError catch (e) {
       return Result(exception: e);
     }
