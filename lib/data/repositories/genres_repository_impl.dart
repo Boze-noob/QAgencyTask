@@ -7,19 +7,21 @@ class GenresRepositoryImpl implements GenresRepository {
   GenresRepositoryImpl({required this.api, required this.db});
 
   @override
-  Future<Result> getAndCacheGenres() async {
+  Future<Result<List<GenreModel>>> getAndCacheGenres() async {
     String url = "genre/movie/list";
     final result = await api.get(url);
+    final data = List<GenreModel>.from(result.data["genres"].map((item) => GenreModel.fromMap(item)));
     if (result.hasData) {
-      db.put(url, result.data);
+      //TODO implement save to secure storage
     }
-    return result;
+    return Result(data: data, exception: result.exception);
   }
 
   @override
-  Future<Result> getCachedGenres() async {
+  Future<Result<List<GenreModel>>> getCachedGenres() async {
     String url = "genre/movie/list";
-    final result = await db.get(url);
-    return result;
+    var result = await db.get(url);
+    //TODO implement
+    return Result(data: null);
   }
 }

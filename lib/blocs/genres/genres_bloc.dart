@@ -1,12 +1,10 @@
-import 'package:q_agency_task/blocs/genres/genres_state.dart';
-
 import '../../_all.dart';
 import '_all.dart';
 
 class GenresBloc extends Bloc<GenresEvent, GenresState> {
   final GenresRepository genresRepository;
 
-  GenresBloc(GenresState initialState, {required this.genresRepository}) : super(initialState) {
+  GenresBloc({required this.genresRepository}) : super(initialState()) {
     on<GenresGetEvent>(_get);
   }
 
@@ -16,16 +14,9 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     emit(state.copyWith(status: GenresStateStatus.loading));
     final result = await genresRepository.getAndCacheGenres();
     if (result.isError) {
-      emit(
-        state.copyWith(status: GenresStateStatus.error, message: result.exception.toString()),
-      );
+      emit(state.copyWith(status: GenresStateStatus.error));
     } else {
-      emit(
-        state.copyWith(
-          status: GenresStateStatus.loaded,
-          genres: result.data,
-        ),
-      );
+      emit(state.copyWith(status: GenresStateStatus.loaded, genres: result.data));
     }
   }
 }
