@@ -74,6 +74,7 @@ class _Details extends StatelessWidget {
                   itemBuilder: (_, index) {
                     return GenreCard(
                       title: 'Comedy',
+                      edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     );
                   }),
             ),
