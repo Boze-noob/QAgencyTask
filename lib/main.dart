@@ -29,12 +29,13 @@ class MyApp extends StatelessWidget {
               OverlayEntry(
                 builder: (context) => AppTheme(
                   appTheme: AppTheme.light,
-                  child: const ContextServiceProviderBlocs(child: Material(child: HomeScreen())),
+                  child: ContextServiceProviderBlocs(child: Material(child: child)),
                 ),
               ),
             ],
           );
         },
+        home: const HomeScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

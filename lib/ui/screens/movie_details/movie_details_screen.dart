@@ -17,8 +17,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         titleSpacing: 0.0,
+        automaticallyImplyLeading: false,
         title: GestureDetector(
-          onTap: () => {},
+          onTap: () => {Navigator.pop(context)},
           child: Padding(
             padding: const EdgeInsets.only(left: 20),
             child: Image.asset(
@@ -68,8 +69,8 @@ class _Image extends StatelessWidget {
     return SizedBox(
       height: _height,
       child: Image.network(
-        imageUrl,
-        fit: BoxFit.fill,
+        imageUrl.toNetworkImageUrl(),
+        fit: BoxFit.cover,
         width: context.screenWidth,
       ),
     );
@@ -160,7 +161,7 @@ class _Rate extends StatelessWidget {
         ),
         BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
           builder: (context, state) {
-            return Text("${state.movieDetailsModel.voteAverage} / 10 IMDb");
+            return Text("${state.movieDetailsModel.voteAverage.roundTo(1)} / 10 IMDb");
           },
         )
       ],

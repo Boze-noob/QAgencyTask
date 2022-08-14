@@ -15,20 +15,30 @@ class _PopularListItemState extends State<PopularListItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: SizedBox(
-        height: 100,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            MovieImage(
-              imageUrl: widget.movieModel.posterPath.toNetworkImageUrl(),
-            ),
-            Expanded(
-                child: _Details(
-              movieModel: widget.movieModel,
-            )),
-            const _FavouriteIcon()
-          ],
+      child: GestureDetector(
+        onTap: () {
+          context.movieDetailsBloc
+              .add(MovieDetailsGetEvent(genres: widget.movieModel.genres, movieId: widget.movieModel.id));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MovieDetailsScreen()),
+          );
+        },
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              MovieImage(
+                imageUrl: widget.movieModel.posterPath.toNetworkImageUrl(),
+              ),
+              Expanded(
+                  child: _Details(
+                movieModel: widget.movieModel,
+              )),
+              const _FavouriteIcon()
+            ],
+          ),
         ),
       ),
     );

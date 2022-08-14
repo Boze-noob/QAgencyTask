@@ -9,5 +9,6 @@ extension BuildContextExtensions on BuildContext {
 
   //Blocs
   GenresBloc get genresBloc => read<GenresBloc>();
+  MovieDetailsBloc get movieDetailsBloc => read<MovieDetailsBloc>();
   MoviesBloc get moviesBloc => read<MoviesBloc>();
 }
