@@ -6,4 +6,7 @@ extension BuildContextExtensions on BuildContext {
   double get screenWidth => mediaQuery.size.width;
   double get screenHeight => mediaQuery.size.height;
   AppThemeData get appTheme => AppTheme.of(this);
+
+  //Blocs
+  GenresBloc get genresBloc => read<GenresBloc>();
 }

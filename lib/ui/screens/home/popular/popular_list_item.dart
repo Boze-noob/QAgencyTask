@@ -77,11 +77,14 @@ class _Details extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: movieModel.genreIds.length,
+                  itemCount: movieModel.genres.length,
                   itemBuilder: (_, index) {
-                    return GenreCard(
-                      title: 'Comedy',
-                      edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: GenreCard(
+                        title: movieModel.genres[index].value,
+                        edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      ),
                     );
                   }),
             ),
