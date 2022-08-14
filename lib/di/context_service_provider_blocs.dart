@@ -20,6 +20,11 @@ class ContextServiceProviderBlocs extends StatelessWidget {
           create: (BuildContext context) =>
               GenresBloc(genresRepository: context.serviceProvider.genresRepository)..add(GenresGetEvent()),
         ),
+        BlocProvider<MoviesBloc>(
+          lazy: false,
+          create: (BuildContext context) =>
+              MoviesBloc(moviesRepository: context.serviceProvider.moviesRepository)..add(MoviesGetEvent()),
+        )
       ],
       child: child,
     );

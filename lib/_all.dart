@@ -4,6 +4,7 @@ export 'ui/screens/_all.dart';
 export 'domain/_all.dart';
 export 'data/_all.dart';
 export 'di/_all.dart';
+export 'blocs/_all.dart';
 
 //Dart
 export 'dart:async';

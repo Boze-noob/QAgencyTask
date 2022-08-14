@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
               OverlayEntry(
                 builder: (context) => AppTheme(
                   appTheme: AppTheme.light,
-                  child: const ContextServiceProviderBlocs(child: Material(child: MovieDetailsScreen())),
+                  child: const ContextServiceProviderBlocs(child: Material(child: HomeScreen())),
                 ),
               ),
             ],

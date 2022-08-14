@@ -22,13 +22,27 @@ class _PopularListState extends State<PopularList> {
           const SizedBox(
             height: 20,
           ),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (_, index) {
-                return const PopularListItem();
-              })
+          BlocBuilder<MoviesBloc, MoviesState>(
+            builder: (context, state) {
+              if (state.status == MoviesStateStatus.loading) {
+                return Loader(
+                  width: 100,
+                  height: 100,
+                  color: context.appTheme.theme.primaryColor,
+                );
+              } else {
+                return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.movies.length,
+                    itemBuilder: (_, index) {
+                      return PopularListItem(
+                        movieModel: state.movies[index],
+                      );
+                    });
+              }
+            },
+          )
         ],
       ),
     );
