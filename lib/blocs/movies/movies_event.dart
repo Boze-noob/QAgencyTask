@@ -7,3 +7,5 @@ class MoviesGetEvent extends MoviesEvent {
 
   MoviesGetEvent({required this.genres});
 }
+
+class MoviesGetNextPageEvent extends MoviesEvent {}

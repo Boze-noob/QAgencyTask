@@ -9,8 +9,8 @@ class MoviesRepositoryImpl implements MoviesRepository {
   MoviesRepositoryImpl({required this.api, required this.db});
 
   @override
-  Future<Result<MovieModelDto>> getAndCacheMovies() async {
-    final result = await api.get(url, {'language': "en_US", 'page': 2});
+  Future<Result<MovieModelDto>> getAndCacheMovies(int page) async {
+    final result = await api.get(url, {'language': "en_US", 'page': page});
     final data = MovieModelDto.fromJson(result.data);
     if (result.hasData) {
       await db.put(url, data);

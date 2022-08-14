@@ -4,11 +4,13 @@ import 'package:q_agency_task/domain/repositories/movies_repository.dart';
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final MoviesRepository moviesRepository;
   late StreamSubscription genresStreamSubscription;
+
   MoviesBloc({
     required this.moviesRepository,
     required GenresBloc genresBloc,
   }) : super(initialState()) {
     on<MoviesGetEvent>(_get);
+    on<MoviesGetNextPageEvent>(_getNextPage);
     genresStreamSubscription = genresBloc.stream.listen((state) {
       add(MoviesGetEvent(genres: state.genres));
     });
@@ -19,17 +21,34 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         totalNumOfPages: 1,
         currentPage: 1,
         movies: [],
+        genres: [],
       );
 
   Future<void> _get(MoviesGetEvent event, Emitter<MoviesState> emit) async {
-    emit(state.copyWith(status: MoviesStateStatus.loading));
-    final result = await moviesRepository.getAndCacheMovies();
+    emit(state.copyWith(status: MoviesStateStatus.loading, genres: event.genres));
+    final result = await moviesRepository.getAndCacheMovies(1);
     if (result.hasData) {
       List<MovieModel> movies = result.data!.results;
       movies = _getGenresForMovies(event.genres, movies);
       emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data!.totalPages, movies: movies));
     } else {
       emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception.toString()));
+    }
+  }
+
+  Future<void> _getNextPage(MoviesGetNextPageEvent event, Emitter<MoviesState> emit) async {
+    int nextPage = state.currentPage + 1;
+    if (nextPage + 1 >= state.totalNumOfPages) {
+      emit(state.copyWith(status: MoviesStateStatus.error, message: "All data has been loaded"));
+    } else {
+      final result = await moviesRepository.getAndCacheMovies(nextPage);
+      if (result.hasData) {
+        List<MovieModel> movies = result.data!.results;
+        movies = state.movies..addAll(_getGenresForMovies(state.genres, movies));
+        emit(state.copyWith(status: MoviesStateStatus.loaded, movies: movies));
+      } else {
+        emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception.toString()));
+      }
     }
   }
 

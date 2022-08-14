@@ -7,6 +7,7 @@ class MoviesState {
   final int currentPage;
   final int totalNumOfPages;
   final List<MovieModel> movies;
+  final List<GenreModel> genres;
   final String? message;
 
   MoviesState({
@@ -14,6 +15,7 @@ class MoviesState {
     required this.currentPage,
     required this.totalNumOfPages,
     required this.movies,
+    required this.genres,
     this.message,
   });
 
@@ -22,6 +24,7 @@ class MoviesState {
     int? currentPage,
     int? totalNumOfPages,
     List<MovieModel>? movies,
+    List<GenreModel>? genres,
     String? message,
   }) =>
       MoviesState(
@@ -29,5 +32,6 @@ class MoviesState {
           totalNumOfPages: totalNumOfPages ?? this.totalNumOfPages,
           currentPage: currentPage ?? this.currentPage,
           movies: movies ?? this.movies,
-          message: message ?? this.message);
+          message: message ?? this.message,
+          genres: genres ?? this.genres);
 }

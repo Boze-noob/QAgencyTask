@@ -1,3 +1,4 @@
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:q_agency_task/_all.dart';
 
 class PopularList extends StatefulWidget {
@@ -8,42 +9,57 @@ class PopularList extends StatefulWidget {
 }
 
 class _PopularListState extends State<PopularList> {
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const ScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Popular",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          BlocBuilder<MoviesBloc, MoviesState>(
-            builder: (context, state) {
-              if (state.status == MoviesStateStatus.loading) {
-                return Loader(
-                  width: 100,
-                  height: 100,
-                  color: context.appTheme.theme.primaryColor,
-                );
-              } else {
-                return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: state.movies.length,
-                    itemBuilder: (_, index) {
-                      return PopularListItem(
-                        movieModel: state.movies[index],
-                      );
-                    });
-              }
-            },
-          )
-        ],
+    return SmartRefresher(
+      controller: _refreshController,
+      onLoading: () => {
+        context.moviesBloc.add(MoviesGetNextPageEvent()),
+        _refreshController.loadComplete(),
+      },
+      onRefresh: () => {
+        context.moviesBloc.add(MoviesGetEvent(genres: context.moviesBloc.state.genres)),
+        _refreshController.refreshCompleted(),
+      },
+      enablePullDown: true,
+      enablePullUp: true,
+      child: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Popular",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            BlocBuilder<MoviesBloc, MoviesState>(
+              builder: (context, state) {
+                if (state.status == MoviesStateStatus.loading) {
+                  return Loader(
+                    width: 100,
+                    height: 100,
+                    color: context.appTheme.theme.primaryColor,
+                  );
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.movies.length,
+                      itemBuilder: (_, index) {
+                        return PopularListItem(
+                          movieModel: state.movies[index],
+                        );
+                      });
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }
