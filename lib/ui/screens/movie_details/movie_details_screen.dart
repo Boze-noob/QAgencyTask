@@ -33,8 +33,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         child: SizedBox(
           width: context.screenWidth,
           height: context.screenHeight,
-          child: Stack(
-            children: [_Image(imageUrl: "https://picsum.photos/250?image=9"), _BasicDetails()],
+          child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+            builder: (context, state) {
+              if (state.status == MovieDetailsStateStatus.loading) {
+                return Loader(
+                  width: 100,
+                  height: 100,
+                  color: context.appTheme.theme.primaryColor,
+                );
+              }
+              return Stack(
+                children: [
+                  _Image(imageUrl: state.movieDetailsModel.posterPath),
+                  const _BasicDetails(),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -85,7 +99,12 @@ class _BasicDetails extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-            children: const [_TitleWithActionBtn(), _Rate(), _Genres(), _Description()],
+            children: const [
+              _TitleWithActionBtn(),
+              _Rate(),
+              _Genres(),
+              _Description(),
+            ],
           ),
         ),
       ),
@@ -108,10 +127,12 @@ class _TitleWithActionBtnState extends State<_TitleWithActionBtn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "Batman the dark knight rises",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
+          BlocBuilder<MovieDetailsBloc, MovieDetailsState>(builder: (context, state) {
+            return Text(
+              state.movieDetailsModel.originalTitle,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            );
+          }),
           IconButton(
             onPressed: () => {},
             icon: Image.asset(
@@ -137,7 +158,11 @@ class _Rate extends StatelessWidget {
           Icons.star,
           color: context.appTheme.theme.colorScheme.secondary,
         ),
-        Text("8.4 / 10 IMDb")
+        BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+          builder: (context, state) {
+            return Text("${state.movieDetailsModel.voteAverage} / 10 IMDb");
+          },
+        )
       ],
     );
   }
@@ -156,18 +181,22 @@ class _Genres extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: 3,
-              itemBuilder: (_, index) => Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: GenreCard(
-                  title: "Comedy",
-                  edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                ),
-              ),
+            BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+              builder: (context, state) {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: state.movieDetailsModel.genres!.length,
+                  itemBuilder: (_, index) => Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: GenreCard(
+                      title: state.movieDetailsModel.genres![index],
+                      edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -183,20 +212,24 @@ class _Description extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        SizedBox(
+      children: [
+        const SizedBox(
           height: 40,
         ),
-        Text(
+        const Text(
           "Description",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
-        Text(
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+        BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+          builder: (context, state) {
+            return Text(
+              state.movieDetailsModel.overview,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+            );
+          },
         ),
       ],
     );

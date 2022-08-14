@@ -45,17 +45,16 @@ class _PopularListState extends State<PopularList> {
                     height: 100,
                     color: context.appTheme.theme.primaryColor,
                   );
-                } else {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.movies.length,
-                      itemBuilder: (_, index) {
-                        return PopularListItem(
-                          movieModel: state.movies[index],
-                        );
-                      });
                 }
+                return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.movies.length,
+                    itemBuilder: (_, index) {
+                      return PopularListItem(
+                        movieModel: state.movies[index],
+                      );
+                    });
               },
             )
           ],

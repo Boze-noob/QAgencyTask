@@ -1,5 +1,4 @@
 import 'package:q_agency_task/_all.dart';
-import 'package:q_agency_task/domain/repositories/movies_repository.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final MoviesRepository moviesRepository;
