@@ -1,5 +1,3 @@
-import 'package:q_agency_task/_all.dart';
-
 class GenreModel {
   int id;
   String name;
@@ -12,17 +10,17 @@ class GenreModel {
   }) =>
       GenreModel(id: id ?? this.id, name: name ?? this.name);
 
-  factory GenreModel.fromMap(dynamic map) {
+  factory GenreModel.fromJson(Map<String, dynamic> json) {
     return GenreModel(
-      id: map['id'],
-      name: map['name'],
+      id: json['id'],
+      name: json['name'],
     );
   }
 
-  static Map<String, dynamic> toMap(GenreModel model) => {
-        'id': model.id,
-        'name': model.name,
-      };
-
-  static String serialize(GenreModel model) => json.encode(GenreModel.toMap(model));
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
 }
