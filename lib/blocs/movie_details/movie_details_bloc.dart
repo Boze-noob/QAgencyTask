@@ -18,14 +18,21 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
       );
 
   Future<void> _get(MovieDetailsGetEvent event, Emitter<MovieDetailsState> emit) async {
-    emit(state.copyWith(status: MovieDetailsStateStatus.loading));
+    //TODO simplify this
+    emit(initialState().copyWith(status: MovieDetailsStateStatus.loading));
+    final cachedResult = await movieDetailsRepository.getCachedMovieDetails(event.movieId);
+    if (cachedResult.hasData) {
+      MovieDetailsModel movieDetailsModel = cachedResult.data!;
+      movieDetailsModel.genres = event.genres;
+      emit(state.copyWith(status: MovieDetailsStateStatus.loaded, movieDetailsModel: movieDetailsModel));
+    }
     final result = await movieDetailsRepository.getAndCacheMovieDetails(event.movieId);
     if (result.hasData) {
       MovieDetailsModel movieDetailsModel = result.data!;
       movieDetailsModel.genres = event.genres;
       emit(state.copyWith(status: MovieDetailsStateStatus.loaded, movieDetailsModel: movieDetailsModel));
-    } else {
-      emit(state.copyWith(status: MovieDetailsStateStatus.error, message: result.exception.toString()));
+    } else if (result.isError) {
+      emit(state.copyWith(message: result.exception.toString()));
     }
   }
 }

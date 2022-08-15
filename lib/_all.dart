@@ -25,3 +25,4 @@ export 'package:flutter/cupertino.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:dio/dio.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
+export 'package:cached_network_image/cached_network_image.dart';

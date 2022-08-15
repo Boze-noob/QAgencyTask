@@ -1,4 +1,5 @@
 import 'package:q_agency_task/_all.dart';
+import 'package:q_agency_task/data/repositories/favourite_repository_impl.dart';
 
 class DevelopmentServiceProvider extends ServiceProvider {}
 
@@ -8,6 +9,7 @@ abstract class ServiceProvider {
   late GenresRepository genresRepository;
   late MovieDetailsRepository movieDetailsRepository;
   late MoviesRepository moviesRepository;
+  late FavouriteRepository favouriteRepository;
 
   //Add new repositories and services here
   //...
@@ -35,6 +37,7 @@ abstract class ServiceProvider {
     genresRepository = GenresRepositoryImpl(api: api, db: db);
     movieDetailsRepository = MovieDetailsRepositoryImpl(api: api, db: db);
     moviesRepository = MoviesRepositoryImpl(api: api, db: db);
+    favouriteRepository = FavouriteRepositoryImpl(db: db);
   }
 }
 

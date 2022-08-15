@@ -11,4 +11,5 @@ extension BuildContextExtensions on BuildContext {
   GenresBloc get genresBloc => read<GenresBloc>();
   MovieDetailsBloc get movieDetailsBloc => read<MovieDetailsBloc>();
   MoviesBloc get moviesBloc => read<MoviesBloc>();
+  FavouriteBloc get favouriteBloc => read<FavouriteBloc>();
 }

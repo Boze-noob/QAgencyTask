@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../../_all.dart';
 
 class FavouritesListItem extends StatefulWidget {
-  const FavouritesListItem({Key? key}) : super(key: key);
+  final MovieModel movieModel;
+  const FavouritesListItem({Key? key, required this.movieModel}) : super(key: key);
 
   @override
   State<FavouritesListItem> createState() => _FavouritesListItemState();
@@ -19,9 +20,12 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
           mainAxisSize: MainAxisSize.max,
           children: [
             MovieImage(
-              imageUrl: "https://picsum.photos/250?image=9",
+              imageUrl: widget.movieModel.posterPath.toNetworkImageUrl(),
             ),
-            const Expanded(child: _Details()),
+            Expanded(
+                child: _Details(
+              movieModel: widget.movieModel,
+            )),
             const Align(alignment: Alignment.topRight, child: _FavouriteIcon())
           ],
         ),
@@ -31,7 +35,8 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
 }
 
 class _Details extends StatelessWidget {
-  const _Details({Key? key}) : super(key: key);
+  final MovieModel movieModel;
+  const _Details({Key? key, required this.movieModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +45,9 @@ class _Details extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Green Book",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+          Text(
+            movieModel.originalTitle,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
           const SizedBox(height: 4),
           Row(
@@ -54,9 +59,9 @@ class _Details extends StatelessWidget {
               const SizedBox(
                 width: 5.33,
               ),
-              const Text(
-                "8.2 / 10 IMDb",
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              Text(
+                "${movieModel.voteAverage.roundTo(1)} / 10 IMDb",
+                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
               ),
             ],
           ),
@@ -70,10 +75,10 @@ class _Details extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: 3,
+                  itemCount: movieModel.genres.length,
                   itemBuilder: (_, index) {
                     return GenreCard(
-                      title: 'Comedy',
+                      title: movieModel.genres[index],
                       edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     );
                   }),

@@ -11,6 +11,7 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
   static GenresState initialState() => GenresState(status: GenresStateStatus.init, genres: []);
 
   Future<void> _get(GenresEvent event, Emitter<GenresState> emit) async {
+    //TODO simplify this
     emit(state.copyWith(status: GenresStateStatus.loading));
     final cachedResult = await genresRepository.getCachedGenres();
     if (cachedResult.hasData) {

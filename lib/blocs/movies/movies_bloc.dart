@@ -24,7 +24,15 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       );
 
   Future<void> _get(MoviesGetEvent event, Emitter<MoviesState> emit) async {
+    //TODO simplify this
     emit(state.copyWith(status: MoviesStateStatus.loading, genres: event.genres));
+    final cachedResult = await moviesRepository.getCachedMovies();
+    if (cachedResult.hasData) {
+      List<MovieModel> movies = cachedResult.data!.results;
+      movies = _getGenresForMovies(event.genres, movies);
+      emit(state.copyWith(
+          status: MoviesStateStatus.loaded, totalNumOfPages: cachedResult.data!.totalPages, movies: movies));
+    }
     final result = await moviesRepository.getAndCacheMovies(1);
     if (result.hasData) {
       List<MovieModel> movies = result.data!.results;

@@ -36,18 +36,18 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           height: context.screenHeight,
           child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
             builder: (context, state) {
-              if (state.status == MovieDetailsStateStatus.loading) {
-                return Loader(
-                  width: 100,
-                  height: 100,
-                  color: context.appTheme.theme.primaryColor,
+              if (state.status == MovieDetailsStateStatus.loaded) {
+                return Stack(
+                  children: [
+                    _Image(imageUrl: state.movieDetailsModel.posterPath),
+                    const _BasicDetails(),
+                  ],
                 );
               }
-              return Stack(
-                children: [
-                  _Image(imageUrl: state.movieDetailsModel.posterPath),
-                  const _BasicDetails(),
-                ],
+              return Loader(
+                width: 100,
+                height: 100,
+                color: context.appTheme.theme.primaryColor,
               );
             },
           ),
@@ -67,13 +67,13 @@ class _Image extends StatelessWidget {
     double _height = context.screenHeight / 2.4;
 
     return SizedBox(
-      height: _height,
-      child: Image.network(
-        imageUrl.toNetworkImageUrl(),
-        fit: BoxFit.cover,
-        width: context.screenWidth,
-      ),
-    );
+        height: _height,
+        child: CachedNetworkImage(
+          imageUrl: imageUrl.toNetworkImageUrl(),
+          fit: BoxFit.cover,
+          width: context.screenWidth,
+          placeholder: (context, url) => Image.asset("assets/images/logo.png"),
+        ));
   }
 }
 

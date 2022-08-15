@@ -10,9 +10,9 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   Future<Result<MovieDetailsModel>> getAndCacheMovieDetails(int movieId) async {
     final String url = "movie/$movieId";
     final result = await api.get(url, {'language': "en_US"});
-    final data = MovieDetailsModel.fromJson(result.data);
+    final data = result.data != null ? MovieDetailsModel.fromJson(result.data) : null;
     if (result.hasData) {
-      await db.put(url, data);
+      await db.put(url, result.data);
     }
     return Result(data: data, exception: result.exception);
   }
@@ -21,7 +21,9 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   Future<Result<MovieDetailsModel>> getCachedMovieDetails(int movieId) async {
     final String url = "movie/$movieId";
     var result = await db.get(url);
-    final data = MovieDetailsModel.fromJson(result.data);
-    return Result(data: data);
+    if (result != null) {
+      result = MovieDetailsModel.fromJson(result);
+    }
+    return Result(data: result);
   }
 }

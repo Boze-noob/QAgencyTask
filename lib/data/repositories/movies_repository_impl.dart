@@ -10,9 +10,10 @@ class MoviesRepositoryImpl implements MoviesRepository {
   @override
   Future<Result<MovieModelDto>> getAndCacheMovies(int page) async {
     final result = await api.get(url, {'language': "en_US", 'page': page});
-    final data = MovieModelDto.fromJson(result.data);
+    final data = result.data != null ? MovieModelDto.fromJson(result.data) : null;
     if (result.hasData) {
-      await db.put(url, data);
+      //TODO should first get data than add new one to list
+      await db.put(url, result.data);
     }
     return Result(data: data, exception: result.exception);
   }
@@ -20,7 +21,9 @@ class MoviesRepositoryImpl implements MoviesRepository {
   @override
   Future<Result<MovieModelDto>> getCachedMovies() async {
     var result = await db.get(url);
-    final data = MovieModelDto.fromJson(result.data);
-    return Result(data: data);
+    if (result != null) {
+      result = MovieModelDto.fromJson(result);
+    }
+    return Result(data: result);
   }
 }

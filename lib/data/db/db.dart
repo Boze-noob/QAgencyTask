@@ -1,7 +1,7 @@
 import 'package:q_agency_task/_all.dart';
 
 abstract class Db {
-  Future<void> put(String key, dynamic data);
+  Future<bool> put(String key, dynamic data);
 
   Future<dynamic> get(String key);
 }
@@ -19,7 +19,9 @@ class DbImpl implements Db {
 
   //TODO try to catch error
   @override
-  Future<void> put(String key, dynamic data) async {
-    await storage.write(key: key, value: jsonEncode(data));
+  Future<bool> put(String key, dynamic data) async {
+    bool result = true;
+    await storage.write(key: key, value: jsonEncode(data)).catchError((onError) => result = false);
+    return result;
   }
 }

@@ -16,19 +16,32 @@ class _FavouritesListState extends State<FavouritesList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Popular",
+            "Favourites",
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
           ),
           const SizedBox(
             height: 20,
           ),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (_, index) {
-                return const FavouritesListItem();
-              })
+          BlocBuilder<FavouriteBloc, FavouriteState>(
+            builder: (context, state) {
+              if (state.status == FavouriteStateStatus.init || state.status == FavouriteStateStatus.loading) {
+                return Loader(
+                  width: 100,
+                  height: 100,
+                  color: context.appTheme.theme.primaryColor,
+                );
+              }
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.movies.length,
+                  itemBuilder: (_, index) {
+                    return FavouritesListItem(
+                      movieModel: state.movies[index],
+                    );
+                  });
+            },
+          )
         ],
       ),
     );

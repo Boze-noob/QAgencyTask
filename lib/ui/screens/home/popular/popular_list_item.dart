@@ -13,6 +13,8 @@ class PopularListItem extends StatefulWidget {
 class _PopularListItemState extends State<PopularListItem> {
   @override
   Widget build(BuildContext context) {
+    print("We are refreshing this");
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
@@ -36,7 +38,9 @@ class _PopularListItemState extends State<PopularListItem> {
                   child: _Details(
                 movieModel: widget.movieModel,
               )),
-              const _FavouriteIcon()
+              _FavouriteIcon(
+                movieModel: widget.movieModel,
+              )
             ],
           ),
         ),
@@ -106,7 +110,8 @@ class _Details extends StatelessWidget {
 }
 
 class _FavouriteIcon extends StatefulWidget {
-  const _FavouriteIcon({Key? key}) : super(key: key);
+  final MovieModel movieModel;
+  const _FavouriteIcon({Key? key, required this.movieModel}) : super(key: key);
 
   @override
   State<_FavouriteIcon> createState() => _FavouriteIconState();
@@ -121,19 +126,34 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
       width: 24,
       child: Align(
         alignment: Alignment.topRight,
-        child: IconButton(
-          alignment: Alignment.topRight,
-          color: Colors.red,
-          iconSize: 24,
-          padding: EdgeInsets.zero,
-          onPressed: () => {
-            setState(() {
-              _isSelected = !_isSelected;
-            })
+        child: BlocListener<FavouriteBloc, FavouriteState>(
+          listener: (context, state) {
+            if (state.status == FavouriteStateStatus.added) {
+              showInfoMessage(state.message ?? "Added", context);
+            }
+            if (state.status == FavouriteStateStatus.error) {
+              showInfoMessage(state.message ?? "Error happen, please try again!", context);
+            }
           },
-          icon: Image.asset(_isSelected == true
-              ? "assets/icons/favourite_selected_fill.png"
-              : "assets/icons/favourite_unselected.png"),
+          child: BlocBuilder<FavouriteBloc, FavouriteState>(
+            builder: (context, state) {
+              return IconButton(
+                alignment: Alignment.topRight,
+                color: Colors.red,
+                iconSize: 24,
+                padding: EdgeInsets.zero,
+                onPressed: () => {
+                  setState(() {
+                    _isSelected = !_isSelected;
+                  }),
+                  context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
+                },
+                icon: Image.asset(_isSelected == true
+                    ? "assets/icons/favourite_selected_fill.png"
+                    : "assets/icons/favourite_unselected.png"),
+              );
+            },
+          ),
         ),
       ),
     );
