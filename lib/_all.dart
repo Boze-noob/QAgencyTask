@@ -5,6 +5,7 @@ export 'domain/_all.dart';
 export 'data/_all.dart';
 export 'di/_all.dart';
 export 'blocs/_all.dart';
+export 'local_notification/_all.dart';
 
 //Dart
 export 'dart:async';
@@ -26,3 +27,4 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:dio/dio.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:cached_network_image/cached_network_image.dart';
+export 'package:connectivity_plus/connectivity_plus.dart';

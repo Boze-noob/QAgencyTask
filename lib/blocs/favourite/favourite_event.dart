@@ -10,4 +10,8 @@ class FavouriteAddEvent extends FavouriteEvent {
   FavouriteAddEvent({required this.movieModel});
 }
 
-class FavouriteRemoveEvent extends FavouriteEvent {}
+class FavouriteRemoveEvent extends FavouriteEvent {
+  final int movieId;
+
+  FavouriteRemoveEvent({required this.movieId});
+}

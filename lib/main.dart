@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:q_agency_task/ui/_all.dart';
 import '_all.dart';
 
 void main() async {
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             ],
           );
         },
-        home: const HomeScreen(),
+        home: const ApplicationNavigationWrapper(),
         debugShowCheckedModeBanner: false,
       ),
     );

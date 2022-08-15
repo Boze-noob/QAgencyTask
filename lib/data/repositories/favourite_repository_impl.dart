@@ -21,12 +21,17 @@ class FavouriteRepositoryImpl extends FavouriteRepository {
   @override
   Future<List<MovieModel>?> getAll() async {
     final result = await db.get(Constants.favouritesKeyDb);
-    return List<MovieModel>.from(result.map((movie) => MovieModel.fromJson(movie)));
+    if (result != null) {
+      return List<MovieModel>.from(result.map((movie) => MovieModel.fromJson(movie)));
+    }
+    return result;
   }
 
   @override
-  Future<bool> remove(int movieId) {
-    // TODO: implement remove
-    throw UnimplementedError();
+  Future<List<MovieModel>> remove(int movieId) async {
+    final result = await db.get(Constants.favouritesKeyDb);
+    final movies = List<MovieModel>.from(result.map((movie) => MovieModel.fromJson(movie)));
+    movies.removeWhere((movie) => movie.id == movieId);
+    return movies;
   }
 }

@@ -23,7 +23,6 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       emit(state.copyWith(
           status: FavouriteStateStatus.error, message: "We could not add movie to favourites, try again!"));
     }
-    emit(state.copyWith(status: FavouriteStateStatus.init));
   }
 
   Future<void> _getAll(FavouriteGetAllEvent event, Emitter<FavouriteState> emit) async {
@@ -34,5 +33,9 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
     }
   }
 
-  Future<void> _remove(FavouriteRemoveEvent event, Emitter<FavouriteState> emit) async {}
+  Future<void> _remove(FavouriteRemoveEvent event, Emitter<FavouriteState> emit) async {
+    emit(state.copyWith(status: FavouriteStateStatus.loading));
+    final result = await favouriteRepository.remove(event.movieId);
+    emit(state.copyWith(status: FavouriteStateStatus.removed, movies: result, message: "Movie successfully removed!"));
+  }
 }

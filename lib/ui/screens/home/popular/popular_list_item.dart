@@ -13,8 +13,6 @@ class PopularListItem extends StatefulWidget {
 class _PopularListItemState extends State<PopularListItem> {
   @override
   Widget build(BuildContext context) {
-    print("We are refreshing this");
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
@@ -130,9 +128,12 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
           listener: (context, state) {
             if (state.status == FavouriteStateStatus.added) {
               showInfoMessage(state.message ?? "Added", context);
-            }
-            if (state.status == FavouriteStateStatus.error) {
+              context.favouriteBloc.add(FavouriteGetAllEvent());
+            } else if (state.status == FavouriteStateStatus.error) {
               showInfoMessage(state.message ?? "Error happen, please try again!", context);
+            } else if (state.status == FavouriteStateStatus.removed) {
+              showInfoMessage(state.message ?? "Removed!", context);
+              context.favouriteBloc.add(FavouriteGetAllEvent());
             }
           },
           child: BlocBuilder<FavouriteBloc, FavouriteState>(
@@ -143,10 +144,17 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
                 iconSize: 24,
                 padding: EdgeInsets.zero,
                 onPressed: () => {
+                  if (!_isSelected)
+                    {
+                      context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
+                    }
+                  else
+                    {
+                      context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieModel.id)),
+                    },
                   setState(() {
                     _isSelected = !_isSelected;
                   }),
-                  context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
                 },
                 icon: Image.asset(_isSelected == true
                     ? "assets/icons/favourite_selected_fill.png"

@@ -1,6 +1,6 @@
 import 'package:q_agency_task/_all.dart';
 
-enum FavouriteStateStatus { init, loading, loaded, error, added }
+enum FavouriteStateStatus { init, loading, loaded, error, added, removed }
 
 class FavouriteState {
   final FavouriteStateStatus status;
