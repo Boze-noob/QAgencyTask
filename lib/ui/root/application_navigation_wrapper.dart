@@ -8,7 +8,15 @@ class ApplicationNavigationWrapper extends StatefulWidget {
   _ApplicationNavigationWrapperState createState() => _ApplicationNavigationWrapperState();
 }
 
-class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrapper> {
+class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrapper> with WidgetsBindingObserver {
+  AppLifecycleState? _notification;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _notification = state;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //TODO implement navigation
@@ -27,10 +35,12 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
   @override
   void initState() {
     super.initState();
-    _checkConnection();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      checkConnectivityResult(result);
-    });
+    if (_notification == AppLifecycleState.resumed) {
+      _checkConnection();
+      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        checkConnectivityResult(result);
+      });
+    }
   }
 
   Future<void> _checkConnection() async {
