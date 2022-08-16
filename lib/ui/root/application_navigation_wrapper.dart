@@ -22,10 +22,13 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
   @override
   void initState() {
     super.initState();
+
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result != ConnectivityResult.mobile && result != ConnectivityResult.wifi) {
         showInfoMessage("There is no internet connection!", context, duration: 5);
-        LocalNotification.showNotification(title: "Alert!", body: "There is no internet connection");
+        final LocalNotification localNotification = LocalNotification();
+        localNotification.initialize();
+        localNotification.showNotification(id: 0, title: "Alert!", body: "No internet connection! Please try again.");
       }
     });
   }
