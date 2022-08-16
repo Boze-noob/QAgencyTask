@@ -26,7 +26,16 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
                 child: _Details(
               movieModel: widget.movieModel,
             )),
-            const Align(alignment: Alignment.topRight, child: _FavouriteIcon())
+            BlocBuilder<FavouriteBloc, FavouriteState>(
+              builder: (context, state) {
+                return Align(
+                    alignment: Alignment.topRight,
+                    child: _FavouriteIcon(
+                      movieModel: widget.movieModel,
+                      favourites: state.movies,
+                    ));
+              },
+            )
           ],
         ),
       ),
@@ -36,6 +45,7 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
 
 class _Details extends StatelessWidget {
   final MovieModel movieModel;
+
   const _Details({Key? key, required this.movieModel}) : super(key: key);
 
   @override
@@ -91,7 +101,10 @@ class _Details extends StatelessWidget {
 }
 
 class _FavouriteIcon extends StatefulWidget {
-  const _FavouriteIcon({Key? key}) : super(key: key);
+  List<MovieModel> favourites;
+  MovieModel movieModel;
+
+  _FavouriteIcon({Key? key, required this.favourites, required this.movieModel}) : super(key: key);
 
   @override
   State<_FavouriteIcon> createState() => _FavouriteIconState();
@@ -99,6 +112,12 @@ class _FavouriteIcon extends StatefulWidget {
 
 class _FavouriteIconState extends State<_FavouriteIcon> {
   bool _isSelected = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSelected = widget.favourites.any((movie) => movie.id == widget.movieModel.id) ? true : false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +131,14 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
           iconSize: 24,
           padding: EdgeInsets.zero,
           onPressed: () => {
+            if (!_isSelected)
+              {
+                context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
+              }
+            else
+              {
+                context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieModel.id)),
+              },
             setState(() {
               _isSelected = !_isSelected;
             })

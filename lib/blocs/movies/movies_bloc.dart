@@ -25,6 +25,8 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
   Future<void> _get(MoviesGetEvent event, Emitter<MoviesState> emit) async {
     //TODO simplify this
+    //Added just to see splash screen
+    await Future.delayed(const Duration(seconds: 2));
     emit(state.copyWith(status: MoviesStateStatus.loading, genres: event.genres));
     final cachedResult = await moviesRepository.getCachedMovies();
     if (cachedResult.hasData) {

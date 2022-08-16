@@ -1,5 +1,4 @@
 import 'package:q_agency_task/_all.dart';
-import 'package:q_agency_task/data/repositories/favourite_repository_impl.dart';
 
 class DevelopmentServiceProvider extends ServiceProvider {}
 

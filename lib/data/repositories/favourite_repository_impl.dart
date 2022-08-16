@@ -32,6 +32,7 @@ class FavouriteRepositoryImpl extends FavouriteRepository {
     final result = await db.get(Constants.favouritesKeyDb);
     final movies = List<MovieModel>.from(result.map((movie) => MovieModel.fromJson(movie)));
     movies.removeWhere((movie) => movie.id == movieId);
+    await db.put(Constants.favouritesKeyDb, movies);
     return movies;
   }
 }

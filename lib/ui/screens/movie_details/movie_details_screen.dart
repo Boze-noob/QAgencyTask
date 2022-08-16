@@ -100,11 +100,33 @@ class _BasicDetails extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-            children: const [
-              _TitleWithActionBtn(),
-              _Rate(),
-              _Genres(),
-              _Description(),
+            children: [
+              BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+                builder: (context, movieDetailsState) {
+                  return BlocListener<FavouriteBloc, FavouriteState>(
+                    listener: (context, state) {
+                      if (state.status == FavouriteStateStatus.added) {
+                        context.favouriteBloc.add(FavouriteGetAllEvent());
+                      } else if (state.status == FavouriteStateStatus.error) {
+                        showInfoMessage(state.message ?? "Error happen, please try again!", context);
+                      } else if (state.status == FavouriteStateStatus.removed) {
+                        context.favouriteBloc.add(FavouriteGetAllEvent());
+                      }
+                    },
+                    child: BlocBuilder<FavouriteBloc, FavouriteState>(
+                      builder: (context, favouriteState) {
+                        return _TitleWithActionBtn(
+                          favourites: favouriteState.movies,
+                          movieDetailsModel: movieDetailsState.movieDetailsModel,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              const _Rate(),
+              const _Genres(),
+              const _Description(),
             ],
           ),
         ),
@@ -114,13 +136,24 @@ class _BasicDetails extends StatelessWidget {
 }
 
 class _TitleWithActionBtn extends StatefulWidget {
-  const _TitleWithActionBtn({Key? key}) : super(key: key);
+  final List<MovieModel> favourites;
+  final MovieDetailsModel movieDetailsModel;
+
+  const _TitleWithActionBtn({Key? key, required this.favourites, required this.movieDetailsModel}) : super(key: key);
 
   @override
   State<_TitleWithActionBtn> createState() => _TitleWithActionBtnState();
 }
 
 class _TitleWithActionBtnState extends State<_TitleWithActionBtn> {
+  bool _isSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSelected = widget.favourites.any((movie) => movie.id == widget.movieDetailsModel.id) ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -128,17 +161,27 @@ class _TitleWithActionBtnState extends State<_TitleWithActionBtn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BlocBuilder<MovieDetailsBloc, MovieDetailsState>(builder: (context, state) {
-            return Text(
-              state.movieDetailsModel.originalTitle,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            );
-          }),
+          Text(
+            widget.movieDetailsModel.originalTitle,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
           IconButton(
-            onPressed: () => {},
-            icon: Image.asset(
-              "assets/icons/favourite_unselected.png",
-            ),
+            onPressed: () => {
+              if (!_isSelected)
+                {
+                  context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieDetailsModel.toMovieModel())),
+                }
+              else
+                {
+                  context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieDetailsModel.id)),
+                },
+              setState(() {
+                _isSelected = !_isSelected;
+              }),
+            },
+            icon: Image.asset(_isSelected == true
+                ? "assets/icons/favourite_selected_fill.png"
+                : "assets/icons/favourite_unselected.png"),
             padding: EdgeInsets.zero,
             alignment: Alignment.centerRight,
           )
@@ -188,11 +231,11 @@ class _Genres extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  itemCount: state.movieDetailsModel.genres!.length,
+                  itemCount: state.movieDetailsModel.genres.length,
                   itemBuilder: (_, index) => Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: GenreCard(
-                      title: state.movieDetailsModel.genres![index],
+                      title: state.movieDetailsModel.genres[index],
                       edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                     ),
                   ),

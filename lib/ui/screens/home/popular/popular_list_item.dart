@@ -54,8 +54,13 @@ class _PopularListItemState extends State<PopularListItem> {
                   child: _Details(
                 movieModel: widget.movieModel,
               )),
-              _FavouriteIcon(
-                movieModel: widget.movieModel,
+              BlocBuilder<FavouriteBloc, FavouriteState>(
+                builder: (context, state) {
+                  return _FavouriteIcon(
+                    movieModel: widget.movieModel,
+                    favourites: state.movies,
+                  );
+                },
               )
             ],
           ),
@@ -68,7 +73,7 @@ class _PopularListItemState extends State<PopularListItem> {
 class _Details extends StatelessWidget {
   final MovieModel movieModel;
 
-  _Details({Key? key, required this.movieModel}) : super(key: key);
+  const _Details({Key? key, required this.movieModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +132,9 @@ class _Details extends StatelessWidget {
 
 class _FavouriteIcon extends StatefulWidget {
   final MovieModel movieModel;
-  const _FavouriteIcon({Key? key, required this.movieModel}) : super(key: key);
+  final List<MovieModel> favourites;
+
+  const _FavouriteIcon({Key? key, required this.movieModel, required this.favourites}) : super(key: key);
 
   @override
   State<_FavouriteIcon> createState() => _FavouriteIconState();
@@ -138,6 +145,7 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
 
   @override
   Widget build(BuildContext context) {
+    _isSelected = widget.favourites.any((movie) => movie.id == widget.movieModel.id) ? true : false;
     return SizedBox(
       width: 24,
       child: Align(
@@ -145,40 +153,34 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
         child: BlocListener<FavouriteBloc, FavouriteState>(
           listener: (context, state) {
             if (state.status == FavouriteStateStatus.added) {
-              showInfoMessage(state.message ?? "Added", context);
               context.favouriteBloc.add(FavouriteGetAllEvent());
             } else if (state.status == FavouriteStateStatus.error) {
               showInfoMessage(state.message ?? "Error happen, please try again!", context);
             } else if (state.status == FavouriteStateStatus.removed) {
-              showInfoMessage(state.message ?? "Removed!", context);
               context.favouriteBloc.add(FavouriteGetAllEvent());
             }
           },
-          child: BlocBuilder<FavouriteBloc, FavouriteState>(
-            builder: (context, state) {
-              return IconButton(
-                alignment: Alignment.topRight,
-                color: Colors.red,
-                iconSize: 24,
-                padding: EdgeInsets.zero,
-                onPressed: () => {
-                  if (!_isSelected)
-                    {
-                      context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
-                    }
-                  else
-                    {
-                      context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieModel.id)),
-                    },
-                  setState(() {
-                    _isSelected = !_isSelected;
-                  }),
+          child: IconButton(
+            alignment: Alignment.topRight,
+            color: Colors.red,
+            iconSize: 24,
+            padding: EdgeInsets.zero,
+            onPressed: () => {
+              if (!_isSelected)
+                {
+                  context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieModel)),
+                }
+              else
+                {
+                  context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieModel.id)),
                 },
-                icon: Image.asset(_isSelected == true
-                    ? "assets/icons/favourite_selected_fill.png"
-                    : "assets/icons/favourite_unselected.png"),
-              );
+              setState(() {
+                _isSelected = !_isSelected;
+              }),
             },
+            icon: Image.asset(_isSelected == true
+                ? "assets/icons/favourite_selected_fill.png"
+                : "assets/icons/favourite_unselected.png"),
           ),
         ),
       ),
