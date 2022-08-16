@@ -12,7 +12,6 @@ class MoviesRepositoryImpl implements MoviesRepository {
     final result = await api.get(url, {'language': "en_US", 'page': page});
     final data = result.data != null ? MovieModelDto.fromJson(result.data) : null;
     if (result.hasData) {
-      //TODO should first get data than add new one to list
       await db.put(url, result.data);
     }
     return Result(data: data, exception: result.exception);
