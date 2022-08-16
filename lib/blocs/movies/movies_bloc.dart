@@ -41,7 +41,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       movies = _getGenresForMovies(event.genres, movies);
       emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data!.totalPages, movies: movies));
     } else {
-      emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception.toString()));
+      emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
     }
   }
 
@@ -56,7 +56,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         movies = state.movies..addAll(_getGenresForMovies(state.genres, movies));
         emit(state.copyWith(status: MoviesStateStatus.loaded, movies: movies));
       } else {
-        emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception.toString()));
+        emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
       }
     }
   }

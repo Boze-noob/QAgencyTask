@@ -11,45 +11,52 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        titleSpacing: 0.0,
-        automaticallyImplyLeading: false,
-        title: GestureDetector(
-          onTap: () => {Navigator.pop(context)},
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Image.asset(
-              "assets/icons/arrow_back.png",
-              width: 24,
-              height: 24,
+    return BlocListener<MovieDetailsBloc, MovieDetailsState>(
+      listener: (context, state) {
+        if (state.status == MovieDetailsStateStatus.error) {
+          showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
+        }
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          titleSpacing: 0.0,
+          automaticallyImplyLeading: false,
+          title: GestureDetector(
+            onTap: () => {Navigator.pop(context)},
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Image.asset(
+                "assets/icons/arrow_back.png",
+                width: 24,
+                height: 24,
+              ),
             ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          width: context.screenWidth,
-          height: context.screenHeight,
-          child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-            builder: (context, state) {
-              if (state.status == MovieDetailsStateStatus.loaded) {
-                return Stack(
-                  children: [
-                    _Image(imageUrl: state.movieDetailsModel.posterPath),
-                    const _BasicDetails(),
-                  ],
+        body: SingleChildScrollView(
+          child: SizedBox(
+            width: context.screenWidth,
+            height: context.screenHeight,
+            child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+              builder: (context, state) {
+                if (state.status == MovieDetailsStateStatus.loaded) {
+                  return Stack(
+                    children: [
+                      _Image(imageUrl: state.movieDetailsModel.posterPath),
+                      const _BasicDetails(),
+                    ],
+                  );
+                }
+                return Loader(
+                  width: 100,
+                  height: 100,
+                  color: context.appTheme.theme.primaryColor,
                 );
-              }
-              return Loader(
-                width: 100,
-                height: 100,
-                color: context.appTheme.theme.primaryColor,
-              );
-            },
+              },
+            ),
           ),
         ),
       ),

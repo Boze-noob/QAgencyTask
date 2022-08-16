@@ -43,7 +43,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
       movieDetailsModel.genres = event.genres;
       emit(state.copyWith(status: MovieDetailsStateStatus.loaded, movieDetailsModel: movieDetailsModel));
     } else if (result.isError) {
-      emit(state.copyWith(message: result.exception.toString()));
+      emit(state.copyWith(status: MovieDetailsStateStatus.error, message: result.exception!.message));
     }
   }
 }

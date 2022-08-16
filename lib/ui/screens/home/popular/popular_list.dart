@@ -13,51 +13,58 @@ class _PopularListState extends State<PopularList> {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      onLoading: () => {
-        context.moviesBloc.add(MoviesGetNextPageEvent()),
-        _refreshController.loadComplete(),
+    return BlocListener<MoviesBloc, MoviesState>(
+      listener: (context, state) {
+        if (state.status == MoviesStateStatus.error) {
+          showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
+        }
       },
-      onRefresh: () => {
-        context.moviesBloc.add(MoviesGetEvent(genres: context.moviesBloc.state.genres)),
-        _refreshController.refreshCompleted(),
-      },
-      enablePullDown: true,
-      enablePullUp: true,
-      child: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Popular",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            BlocBuilder<MoviesBloc, MoviesState>(
-              builder: (context, state) {
-                if (state.status == MoviesStateStatus.loading) {
-                  return Loader(
-                    width: 100,
-                    height: 100,
-                    color: context.appTheme.theme.primaryColor,
-                  );
-                }
-                return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: state.movies.length,
-                    itemBuilder: (_, index) {
-                      return PopularListItem(
-                        movieModel: state.movies[index],
-                      );
-                    });
-              },
-            )
-          ],
+      child: SmartRefresher(
+        controller: _refreshController,
+        onLoading: () => {
+          context.moviesBloc.add(MoviesGetNextPageEvent()),
+          _refreshController.loadComplete(),
+        },
+        onRefresh: () => {
+          context.moviesBloc.add(MoviesGetEvent(genres: context.moviesBloc.state.genres)),
+          _refreshController.refreshCompleted(),
+        },
+        enablePullDown: true,
+        enablePullUp: true,
+        child: SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Popular",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              BlocBuilder<MoviesBloc, MoviesState>(
+                builder: (context, state) {
+                  if (state.status == MoviesStateStatus.loading) {
+                    return Loader(
+                      width: 100,
+                      height: 100,
+                      color: context.appTheme.theme.primaryColor,
+                    );
+                  }
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.movies.length,
+                      itemBuilder: (_, index) {
+                        return PopularListItem(
+                          movieModel: state.movies[index],
+                        );
+                      });
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

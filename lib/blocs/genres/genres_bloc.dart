@@ -23,7 +23,7 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     if (result.hasData) {
       emit(state.copyWith(status: GenresStateStatus.loaded, genres: result.data));
     } else {
-      emit(state.copyWith(status: GenresStateStatus.error, message: result.exception.toString()));
+      emit(state.copyWith(status: GenresStateStatus.error, message: result.exception!.message));
     }
   }
 }

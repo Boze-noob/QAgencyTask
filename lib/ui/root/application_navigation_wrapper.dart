@@ -35,12 +35,17 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
   @override
   void initState() {
     super.initState();
-    if (_notification == AppLifecycleState.resumed) {
-      _checkConnection();
-      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        checkConnectivityResult(result);
-      });
-    }
+    WidgetsBinding.instance?.addObserver(this);
+    _checkConnection();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      checkConnectivityResult(result);
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
   }
 
   Future<void> _checkConnection() async {
@@ -48,7 +53,9 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
   }
 
   void checkConnectivityResult(ConnectivityResult result) {
-    if (result != ConnectivityResult.mobile && result != ConnectivityResult.wifi) {
+    if (result != ConnectivityResult.mobile &&
+        result != ConnectivityResult.wifi &&
+        (_notification == AppLifecycleState.resumed || _notification == null)) {
       showInfoMessage("There is no internet connection!", context, duration: 5);
       final LocalNotification localNotification = LocalNotification();
       localNotification.initialize();
