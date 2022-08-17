@@ -6,6 +6,7 @@ export 'data/_all.dart';
 export 'di/_all.dart';
 export 'blocs/_all.dart';
 export 'local_notification/_all.dart';
+export 'dio/_all.dart';
 
 //Dart
 export 'dart:async';

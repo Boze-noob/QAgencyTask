@@ -56,7 +56,7 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
     if (result != ConnectivityResult.mobile &&
         result != ConnectivityResult.wifi &&
         (_notification == AppLifecycleState.resumed || _notification == null)) {
-      showInfoMessage("There is no internet connection!", context, duration: 5);
+      showInfoMessage("No internet connection!", context, duration: 5);
       final LocalNotification localNotification = LocalNotification();
       localNotification.initialize();
       localNotification.showNotification(id: 0, title: "Alert!", body: "No internet connection! Please try again.");

@@ -30,6 +30,11 @@ class _FavouritesListState extends State<FavouritesList> {
                   height: 100,
                   color: context.appTheme.theme.primaryColor,
                 );
+              } else if (state.status == FavouriteStateStatus.empty) {
+                return const Text(
+                  "No movies added",
+                  style: TextStyle(fontSize: 20),
+                );
               }
               return ListView.builder(
                   shrinkWrap: true,

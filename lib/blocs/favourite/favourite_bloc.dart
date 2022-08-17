@@ -30,6 +30,8 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
     final result = await favouriteRepository.getAll();
     if (result != null) {
       emit(state.copyWith(status: FavouriteStateStatus.loaded, movies: result));
+    } else {
+      emit(state.copyWith(status: FavouriteStateStatus.empty));
     }
   }
 
