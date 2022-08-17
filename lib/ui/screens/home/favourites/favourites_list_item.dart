@@ -14,29 +14,36 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: SizedBox(
-        height: 100,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            MovieImage(
-              imageUrl: widget.movieModel.posterPath.toNetworkImageUrl(),
-            ),
-            Expanded(
-                child: _Details(
-              movieModel: widget.movieModel,
-            )),
-            BlocBuilder<FavouriteBloc, FavouriteState>(
-              builder: (context, state) {
-                return Align(
-                    alignment: Alignment.topRight,
-                    child: _FavouriteIcon(
-                      movieModel: widget.movieModel,
-                      favourites: state.movies,
-                    ));
-              },
-            )
-          ],
+      child: GestureDetector(
+        onTap: () {
+          context.movieDetailsBloc
+              .add(MovieDetailsGetEvent(genres: widget.movieModel.genres, movieId: widget.movieModel.id));
+          Navigator.push(context, NavigationScaleTransition(widget: const MovieDetailsScreen()));
+        },
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              MovieImage(
+                imageUrl: widget.movieModel.posterPath.toNetworkImageUrl(),
+              ),
+              Expanded(
+                  child: _Details(
+                movieModel: widget.movieModel,
+              )),
+              BlocBuilder<FavouriteBloc, FavouriteState>(
+                builder: (context, state) {
+                  return Align(
+                      alignment: Alignment.topRight,
+                      child: _FavouriteIcon(
+                        movieModel: widget.movieModel,
+                        favourites: state.movies,
+                      ));
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -87,9 +94,12 @@ class _Details extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: movieModel.genres.length,
                   itemBuilder: (_, index) {
-                    return GenreCard(
-                      title: movieModel.genres[index],
-                      edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: GenreCard(
+                        title: movieModel.genres[index],
+                        edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      ),
                     );
                   }),
             ),

@@ -5,9 +5,9 @@ enum MovieDetailsStateStatus { init, loading, loaded, error, noData }
 class MovieDetailsState {
   final MovieDetailsStateStatus status;
   final MovieDetailsModel movieDetailsModel;
-  final String? message;
+  final String message;
 
-  MovieDetailsState({required this.status, required this.movieDetailsModel, this.message});
+  MovieDetailsState({required this.status, required this.movieDetailsModel, required this.message});
 
   MovieDetailsState copyWith({
     MovieDetailsStateStatus? status,

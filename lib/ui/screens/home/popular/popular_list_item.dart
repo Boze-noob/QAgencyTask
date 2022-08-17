@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:q_agency_task/ui/screens/common/navigation_scale_transition.dart';
 import '../../../../_all.dart';
 
 class PopularListItem extends StatefulWidget {
@@ -11,24 +12,6 @@ class PopularListItem extends StatefulWidget {
 }
 
 class _PopularListItemState extends State<PopularListItem> {
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const MovieDetailsScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,10 +20,7 @@ class _PopularListItemState extends State<PopularListItem> {
         onTap: () {
           context.movieDetailsBloc
               .add(MovieDetailsGetEvent(genres: widget.movieModel.genres, movieId: widget.movieModel.id));
-          Navigator.push(
-            context,
-            _createRoute(),
-          );
+          Navigator.push(context, NavigationScaleTransition(widget: const MovieDetailsScreen()));
         },
         child: SizedBox(
           height: 100,

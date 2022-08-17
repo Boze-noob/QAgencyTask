@@ -40,7 +40,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       List<MovieModel> movies = result.data!.results;
       movies = _getGenresForMovies(event.genres, movies);
       emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data!.totalPages, movies: movies));
-    } else {
+    } else if (result.isError) {
       emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
     }
   }

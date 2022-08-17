@@ -81,7 +81,7 @@ class MovieModel {
         video: json['video'],
         voteAverage: json['vote_average'].toDouble(),
         voteCount: json['vote_count'],
-        genres: []);
+        genres: json['genres'] != null ? json['genres'].cast<String>() : []);
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +100,7 @@ class MovieModel {
       'video': video,
       'vote_average': voteAverage,
       'vote_count': voteCount,
+      'genres': genres,
     };
   }
 }

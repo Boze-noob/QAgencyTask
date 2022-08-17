@@ -26,6 +26,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
           title: '',
         ),
         status: MovieDetailsStateStatus.init,
+        message: '',
       );
 
   Future<void> _get(MovieDetailsGetEvent event, Emitter<MovieDetailsState> emit) async {
@@ -43,7 +44,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
       movieDetailsModel.genres = event.genres;
       emit(state.copyWith(status: MovieDetailsStateStatus.loaded, movieDetailsModel: movieDetailsModel));
     } else if (result.isError) {
-      emit(state.copyWith(status: MovieDetailsStateStatus.error, message: result.exception!.message));
+      emit(state.copyWith(message: result.exception!.message));
     }
   }
 }

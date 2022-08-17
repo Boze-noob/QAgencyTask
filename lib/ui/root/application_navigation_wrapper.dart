@@ -19,7 +19,6 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
 
   @override
   Widget build(BuildContext context) {
-    //TODO implement navigation
     return Scaffold(
       body: BlocBuilder<MoviesBloc, MoviesState>(
         builder: (context, state) {

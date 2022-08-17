@@ -13,8 +13,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocListener<MovieDetailsBloc, MovieDetailsState>(
       listener: (context, state) {
-        if (state.status == MovieDetailsStateStatus.error) {
-          showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
+        if (state.message.isNotEmpty) {
+          showInfoMessage(state.message, context);
         }
       },
       child: Scaffold(
@@ -42,18 +42,18 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             height: context.screenHeight,
             child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
               builder: (context, state) {
-                if (state.status == MovieDetailsStateStatus.loaded) {
-                  return Stack(
-                    children: [
-                      _Image(imageUrl: state.movieDetailsModel.posterPath),
-                      const _BasicDetails(),
-                    ],
+                if (state.status == MovieDetailsStateStatus.loading) {
+                  return Loader(
+                    width: 100,
+                    height: 100,
+                    color: context.appTheme.theme.primaryColor,
                   );
                 }
-                return Loader(
-                  width: 100,
-                  height: 100,
-                  color: context.appTheme.theme.primaryColor,
+                return Stack(
+                  children: [
+                    _Image(imageUrl: state.movieDetailsModel.posterPath),
+                    const _BasicDetails(),
+                  ],
                 );
               },
             ),
@@ -79,6 +79,9 @@ class _Image extends StatelessWidget {
           imageUrl: imageUrl.toNetworkImageUrl(),
           fit: BoxFit.cover,
           width: context.screenWidth,
+          errorWidget: (context, url, err) => Image.asset(
+            "assets/images/logo.png",
+          ),
           placeholder: (context, url) => Image.asset("assets/images/logo.png"),
         ));
   }

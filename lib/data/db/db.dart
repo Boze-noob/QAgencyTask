@@ -17,7 +17,6 @@ class DbImpl implements Db {
     return result != null ? jsonDecode(result) : null;
   }
 
-  //TODO try to catch error
   @override
   Future<bool> put(String key, dynamic data) async {
     bool result = true;

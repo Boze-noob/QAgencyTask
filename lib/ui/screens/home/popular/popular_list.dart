@@ -18,7 +18,7 @@ class _PopularListState extends State<PopularList> {
         if (state.status == MoviesStateStatus.error) {
           showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
         }
-        if (state.status == MoviesStateStatus.loaded) {
+        if (state.status == MoviesStateStatus.loaded && _refreshController.isLoading) {
           _refreshController.loadComplete();
         }
       },
