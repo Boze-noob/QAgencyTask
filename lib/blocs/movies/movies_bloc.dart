@@ -47,14 +47,14 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
   Future<void> _getNextPage(MoviesGetNextPageEvent event, Emitter<MoviesState> emit) async {
     int nextPage = state.currentPage + 1;
-    if (nextPage + 1 >= state.totalNumOfPages) {
+    if (nextPage > state.totalNumOfPages) {
       emit(state.copyWith(status: MoviesStateStatus.error, message: "All data has been loaded"));
     } else {
       final result = await moviesRepository.getAndCacheMovies(nextPage);
       if (result.hasData) {
         List<MovieModel> movies = result.data!.results;
         movies = state.movies..addAll(_getGenresForMovies(state.genres, movies));
-        emit(state.copyWith(status: MoviesStateStatus.loaded, movies: movies));
+        emit(state.copyWith(status: MoviesStateStatus.loaded, movies: movies, currentPage: nextPage));
       } else {
         emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
       }

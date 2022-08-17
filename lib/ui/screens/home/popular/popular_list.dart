@@ -18,18 +18,16 @@ class _PopularListState extends State<PopularList> {
         if (state.status == MoviesStateStatus.error) {
           showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
         }
+        if (state.status == MoviesStateStatus.loaded) {
+          _refreshController.loadComplete();
+        }
       },
       child: SmartRefresher(
         controller: _refreshController,
         onLoading: () => {
           context.moviesBloc.add(MoviesGetNextPageEvent()),
-          _refreshController.loadComplete(),
         },
-        onRefresh: () => {
-          context.moviesBloc.add(MoviesGetEvent(genres: context.moviesBloc.state.genres)),
-          _refreshController.refreshCompleted(),
-        },
-        enablePullDown: true,
+        enablePullDown: false,
         enablePullUp: true,
         child: SingleChildScrollView(
           physics: const ScrollPhysics(),

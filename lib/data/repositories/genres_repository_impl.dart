@@ -9,7 +9,7 @@ class GenresRepositoryImpl implements GenresRepository {
 
   @override
   Future<Result<List<GenreModel>>> getAndCacheGenres() async {
-    final result = await api.get(url, null);
+    final result = await api.get(url, {"api_key": Constants.apiKey});
     final data =
         result.hasData ? List<GenreModel>.from(result.data["genres"].map((item) => GenreModel.fromJson(item))) : null;
     if (result.hasData) {

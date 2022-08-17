@@ -9,7 +9,7 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   @override
   Future<Result<MovieDetailsModel>> getAndCacheMovieDetails(int movieId) async {
     final String url = "movie/$movieId";
-    final result = await api.get(url, {'language': "en_US"});
+    final result = await api.get(url, {"api_key": Constants.apiKey, 'language': "en_US"});
     final data = result.data != null ? MovieDetailsModel.fromJson(result.data) : null;
     if (result.hasData) {
       await db.put(url, result.data);

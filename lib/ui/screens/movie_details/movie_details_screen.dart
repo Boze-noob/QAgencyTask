@@ -122,7 +122,7 @@ class _BasicDetails extends StatelessWidget {
                     },
                     child: BlocBuilder<FavouriteBloc, FavouriteState>(
                       builder: (context, favouriteState) {
-                        return _TitleWithActionBtn(
+                        return _TitleAndFavouriteIcon(
                           favourites: favouriteState.movies,
                           movieDetailsModel: movieDetailsState.movieDetailsModel,
                         );
@@ -142,17 +142,17 @@ class _BasicDetails extends StatelessWidget {
   }
 }
 
-class _TitleWithActionBtn extends StatefulWidget {
+class _TitleAndFavouriteIcon extends StatefulWidget {
   final List<MovieModel> favourites;
   final MovieDetailsModel movieDetailsModel;
 
-  const _TitleWithActionBtn({Key? key, required this.favourites, required this.movieDetailsModel}) : super(key: key);
+  const _TitleAndFavouriteIcon({Key? key, required this.favourites, required this.movieDetailsModel}) : super(key: key);
 
   @override
-  State<_TitleWithActionBtn> createState() => _TitleWithActionBtnState();
+  State<_TitleAndFavouriteIcon> createState() => _TitleWithActionBtnState();
 }
 
-class _TitleWithActionBtnState extends State<_TitleWithActionBtn> {
+class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
   bool _isSelected = false;
 
   @override
@@ -168,9 +168,11 @@ class _TitleWithActionBtnState extends State<_TitleWithActionBtn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            widget.movieDetailsModel.originalTitle,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          Expanded(
+            child: Text(
+              widget.movieDetailsModel.originalTitle,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
           ),
           IconButton(
             onPressed: () => {
