@@ -24,21 +24,22 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       );
 
   Future<void> _get(MoviesGetEvent event, Emitter<MoviesState> emit) async {
-    //TODO simplify this
-    //Added just to see splash screen
+    //Delayed just to show splash screen
     await Future.delayed(const Duration(seconds: 2));
+
     emit(state.copyWith(status: MoviesStateStatus.loading, genres: event.genres));
+
     final cachedResult = await moviesRepository.getCachedMovies();
     if (cachedResult.hasData) {
       List<MovieModel> movies = cachedResult.data!.results;
-      movies = _getGenresForMovies(event.genres, movies);
+      movies = _getGenresForMovie(event.genres, movies);
       emit(state.copyWith(
-          status: MoviesStateStatus.loaded, totalNumOfPages: cachedResult.data!.totalPages, movies: movies));
+          status: MoviesStateStatus.loaded, totalNumOfPages: cachedResult.data?.totalPages, movies: movies));
     }
-    final result = await moviesRepository.getAndCacheMovies(1);
+    final result = await moviesRepository.getAndCacheMovies(state.currentPage);
     if (result.hasData) {
       List<MovieModel> movies = result.data!.results;
-      movies = _getGenresForMovies(event.genres, movies);
+      movies = _getGenresForMovie(event.genres, movies);
       emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data!.totalPages, movies: movies));
     } else if (result.isError) {
       emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
@@ -53,7 +54,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       final result = await moviesRepository.getAndCacheMovies(nextPage);
       if (result.hasData) {
         List<MovieModel> movies = result.data!.results;
-        movies = state.movies..addAll(_getGenresForMovies(state.genres, movies));
+        movies = state.movies..addAll(_getGenresForMovie(state.genres, movies));
         emit(state.copyWith(status: MoviesStateStatus.loaded, movies: movies, currentPage: nextPage));
       } else {
         emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
@@ -61,13 +62,13 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     }
   }
 
-  List<MovieModel> _getGenresForMovies(List<GenreModel> genres, List<MovieModel> movies) {
-    //TODO simplify this
-    for (int i = 0; i < movies.length; i++) {
-      for (int j = 0; j < movies[i].genreIds.length; j++) {
-        int index = genres.indexWhere((genre) => genre.id == movies[i].genreIds[j]);
-        if (index != -1) {
-          movies[i].genres.add(genres[index].name);
+  List<MovieModel> _getGenresForMovie(List<GenreModel> genres, List<MovieModel> movies) {
+    for (MovieModel movieModel in movies) {
+      int movieModelIndex = movies.indexOf(movieModel);
+      for (int modelGenreId in movieModel.genreIds) {
+        int genreIndex = genres.indexWhere((genre) => genre.id == modelGenreId);
+        if (genreIndex != -1) {
+          movies[movieModelIndex].genres.add(genres[genreIndex].name);
         }
       }
     }

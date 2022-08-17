@@ -31,37 +31,37 @@ class MovieModelDto {
 }
 
 class MovieModel {
-  bool adult;
+  bool? adult;
   String? backdropPath;
   List<int> genreIds;
   int id;
-  String originalLanguage;
+  String? originalLanguage;
   String originalTitle;
   String overview;
-  double popularity;
+  double? popularity;
   String posterPath;
-  String releaseDate;
+  String? releaseDate;
   String title;
-  bool video;
+  bool? video;
   double voteAverage;
-  int voteCount;
+  int? voteCount;
   List<String> genres;
 
   MovieModel({
-    required this.adult,
+    this.adult,
     this.backdropPath,
     required this.genreIds,
     required this.id,
-    required this.originalLanguage,
+    this.originalLanguage,
     required this.originalTitle,
     required this.overview,
-    required this.popularity,
+    this.popularity,
     required this.posterPath,
-    required this.releaseDate,
+    this.releaseDate,
     required this.title,
-    required this.video,
+    this.video,
     required this.voteAverage,
-    required this.voteCount,
+    this.voteCount,
     required this.genres,
   });
 

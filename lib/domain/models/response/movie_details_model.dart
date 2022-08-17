@@ -2,35 +2,35 @@ import 'package:q_agency_task/_all.dart';
 
 class MovieDetailsModel {
   int id;
-  bool adult;
-  String backdropPath;
+  bool? adult;
+  String? backdropPath;
   String posterPath;
   String originalTitle;
-  String originalLanguage;
+  String? originalLanguage;
   String overview;
   double voteAverage;
-  double popularity;
-  String releaseDate;
+  double? popularity;
+  String? releaseDate;
   String title;
-  bool video;
-  int voteCount;
+  bool? video;
+  int? voteCount;
   List<GenreModel> genreList;
   List<String> genres = [];
 
   MovieDetailsModel({
     required this.id,
-    required this.adult,
-    required this.backdropPath,
+    this.adult,
+    this.backdropPath,
     required this.posterPath,
     required this.originalTitle,
-    required this.originalLanguage,
+    this.originalLanguage,
     required this.overview,
     required this.voteAverage,
-    required this.popularity,
-    required this.releaseDate,
+    this.popularity,
+    this.releaseDate,
     required this.title,
-    required this.video,
-    required this.voteCount,
+    this.video,
+    this.voteCount,
     required this.genreList,
     required this.genres,
   });
