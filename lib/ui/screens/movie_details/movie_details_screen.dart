@@ -232,22 +232,24 @@ class _Genres extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-              builder: (context, state) {
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: state.movieDetailsModel.genres.length,
-                  itemBuilder: (_, index) => Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: GenreCard(
-                      title: state.movieDetailsModel.genres[index],
-                      edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            Expanded(
+              child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+                builder: (context, state) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: state.movieDetailsModel.genres.length,
+                    itemBuilder: (_, index) => Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: GenreCard(
+                        title: state.movieDetailsModel.genres[index],
+                        edgeInsets: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),
