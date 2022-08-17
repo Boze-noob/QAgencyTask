@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:q_agency_task/ui/_all.dart';
 import 'package:q_agency_task/ui/screens/common/navigation_scale_transition.dart';
 import '../../../../_all.dart';
 
@@ -158,9 +159,7 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
                 _isSelected = !_isSelected;
               }),
             },
-            icon: Image.asset(_isSelected == true
-                ? "assets/icons/favourite_selected_fill.png"
-                : "assets/icons/favourite_unselected.png"),
+            icon: Image.asset(_isSelected == true ? AppAssets.favouriteSelected : AppAssets.favouriteUnselected),
           ),
         ),
       ),

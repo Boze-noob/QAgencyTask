@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Padding(
           padding: EdgeInsets.only(left: leftPadding),
           child: Image.asset(
-            "assets/images/logo.png",
+            AppAssets.logo,
             width: 24,
             height: 24,
           ),
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _selectedIndex = index;
         }),
         items: [
-          bottomNavBarItem("assets/icons/movies.png", "Movies", context),
+          bottomNavBarItem(AppAssets.movieIcon, "Movies", context),
           bottomNavBarItem("assets/icons/favourite_selected.png", "Favourites", context)
         ],
       ),

@@ -153,9 +153,7 @@ class _FavouriteIconState extends State<_FavouriteIcon> {
               _isSelected = !_isSelected;
             })
           },
-          icon: Image.asset(_isSelected == true
-              ? "assets/icons/favourite_selected_fill.png"
-              : "assets/icons/favourite_unselected.png"),
+          icon: Image.asset(_isSelected == true ? AppAssets.favouriteSelected : AppAssets.favouriteUnselected),
         ),
       ),
     );

@@ -29,7 +29,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Image.asset(
-                "assets/icons/arrow_back.png",
+                AppAssets.arrowBack,
                 width: 24,
                 height: 24,
               ),
@@ -80,9 +80,9 @@ class _Image extends StatelessWidget {
           fit: BoxFit.cover,
           width: context.screenWidth,
           errorWidget: (context, url, err) => Image.asset(
-            "assets/images/logo.png",
+            AppAssets.logo,
           ),
-          placeholder: (context, url) => Image.asset("assets/images/logo.png"),
+          placeholder: (context, url) => Image.asset(AppAssets.logo),
         ));
   }
 }
@@ -191,9 +191,7 @@ class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
                 _isSelected = !_isSelected;
               }),
             },
-            icon: Image.asset(_isSelected == true
-                ? "assets/icons/favourite_selected_fill.png"
-                : "assets/icons/favourite_unselected.png"),
+            icon: Image.asset(_isSelected == true ? AppAssets.favouriteSelected : AppAssets.favouriteUnselected),
             padding: EdgeInsets.zero,
             alignment: Alignment.centerRight,
           )

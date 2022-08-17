@@ -11,8 +11,11 @@ class MovieImage extends StatelessWidget {
       imageUrl: imageUrl,
       width: 100,
       height: 100,
+      errorWidget: (context, url, err) => Image.asset(
+        AppAssets.logo,
+      ),
       placeholder: (context, url) => Image.asset(
-        "assets/images/logo.png",
+        AppAssets.logo,
       ),
     );
   }
