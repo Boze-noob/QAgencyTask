@@ -159,11 +159,21 @@ class _TitleAndFavouriteIcon extends StatefulWidget {
 
 class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
   bool _isSelected = false;
+  bool _glowAnimation = false;
 
   @override
   void initState() {
     super.initState();
     _isSelected = widget.favourites.any((movie) => movie.id == widget.movieDetailsModel.id) ? true : false;
+  }
+
+  Timer scheduleTimeout([int milliseconds = 1000]) => Timer(Duration(milliseconds: milliseconds), handleTimeout);
+
+  void handleTimeout() {
+    setState(() {
+      _isSelected = !_isSelected;
+      _glowAnimation = false;
+    });
   }
 
   @override
@@ -181,6 +191,10 @@ class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
           ),
           IconButton(
             onPressed: () => {
+              scheduleTimeout(),
+              setState(() {
+                _glowAnimation = true;
+              }),
               if (!_isSelected)
                 {
                   context.favouriteBloc.add(FavouriteAddEvent(movieModel: widget.movieDetailsModel.toMovieModel())),
@@ -189,17 +203,28 @@ class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
                 {
                   context.favouriteBloc.add(FavouriteRemoveEvent(movieId: widget.movieDetailsModel.id)),
                 },
-              setState(() {
-                _isSelected = !_isSelected;
-              }),
             },
-            icon: Image.asset(_isSelected == true ? AppAssets.favouriteSelected : AppAssets.favouriteUnselected),
+            icon: AvatarGlow(
+                glowColor: const Color(0xFFB60533),
+                animate: _glowAnimation,
+                endRadius: 150,
+                child: Image.asset(_getIcon())),
             padding: EdgeInsets.zero,
             alignment: Alignment.centerRight,
           )
         ],
       ),
     );
+  }
+
+  String _getIcon() {
+    if (_glowAnimation) {
+      return AppAssets.favouriteFill;
+    } else if (_isSelected) {
+      return AppAssets.favouriteSelected;
+    } else {
+      return AppAssets.favouriteUnselected;
+    }
   }
 }
 
@@ -240,7 +265,6 @@ class _Genres extends StatelessWidget {
             Expanded(
               child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
                 builder: (context, state) {
-                  print("Length of genres for this model" + state.movieDetailsModel.genres.length.toString());
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.zero,

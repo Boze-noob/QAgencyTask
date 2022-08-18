@@ -31,3 +31,4 @@ export 'package:cached_network_image/cached_network_image.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:hive_flutter/hive_flutter.dart';
 export 'package:hive/hive.dart';
+export 'package:avatar_glow/avatar_glow.dart';

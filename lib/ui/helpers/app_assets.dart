@@ -4,6 +4,7 @@ class AppAssets {
 
   static const favouriteSelected = "assets/icons/favourite_selected_fill.png";
   static const favouriteUnselected = "assets/icons/favourite_unselected.png";
+  static const favouriteFill = "assets/icons/favourite_fill.png";
   static const logo = "assets/images/logo.png";
   static const movieIcon = "assets/icons/movies.png";
   static const arrowBack = "assets/icons/arrow_back.png";
