@@ -9,11 +9,11 @@ class ApplicationNavigationWrapper extends StatefulWidget {
 }
 
 class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrapper> with WidgetsBindingObserver {
-  AppLifecycleState? _notification;
+  AppLifecycleState? _lifecycleState;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     setState(() {
-      _notification = state;
+      _lifecycleState = state;
     });
   }
 
@@ -37,7 +37,7 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
     WidgetsBinding.instance?.addObserver(this);
     _checkConnection();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      checkConnectivityResult(result);
+      checkConnectivityResult(connectivityResult: result, context: context, lifecycleState: _lifecycleState);
     });
   }
 
@@ -48,17 +48,9 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
   }
 
   Future<void> _checkConnection() async {
-    checkConnectivityResult(await (Connectivity().checkConnectivity()));
-  }
-
-  void checkConnectivityResult(ConnectivityResult result) {
-    if (result != ConnectivityResult.mobile &&
-        result != ConnectivityResult.wifi &&
-        (_notification == AppLifecycleState.resumed || _notification == null)) {
-      showInfoMessage("No internet connection!", context, duration: 5);
-      final LocalNotification localNotification = LocalNotification();
-      localNotification.initialize();
-      localNotification.showNotification(id: 0, title: "Alert!", body: "No internet connection! Please connect!");
-    }
+    checkConnectivityResult(
+        context: context,
+        connectivityResult: await (Connectivity().checkConnectivity()),
+        lifecycleState: _lifecycleState);
   }
 }

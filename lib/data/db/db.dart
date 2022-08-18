@@ -15,8 +15,6 @@ class DbImpl implements Db {
   Future<dynamic> get(String key) async {
     final result = await box.get(key);
     return result;
-    //final result = await storage.read(key: key);
-    //return result != null ? jsonDecode(result) : null;
   }
 
   @override
@@ -24,8 +22,5 @@ class DbImpl implements Db {
     bool result = true;
     await box.put(key, data).catchError((onError) => result = false);
     return result;
-    //bool result = true;
-    //await storage.write(key: key, value: jsonEncode(data)).catchError((onError) => result = false);
-    //return result;
   }
 }

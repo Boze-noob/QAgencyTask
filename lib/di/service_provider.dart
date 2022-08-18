@@ -41,6 +41,5 @@ abstract class ServiceProvider {
 Future<ServiceProvider> resolveServiceProviderFromEnvironment() async {
   ServiceProvider serviceProvider = DevelopmentServiceProvider();
   await serviceProvider.init();
-
   return serviceProvider;
 }

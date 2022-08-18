@@ -1,5 +1,4 @@
 import 'package:q_agency_task/_all.dart';
-import 'package:q_agency_task/blocs/genres/_all.dart';
 
 class ContextServiceProviderBlocs extends StatelessWidget {
   final Widget child;

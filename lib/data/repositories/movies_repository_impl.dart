@@ -13,14 +13,14 @@ class MoviesRepositoryImpl implements MoviesRepository {
     final result = await api.get(url, queryParameters);
     final data = result.data != null ? MovieModelDto.fromJson(result.data) : null;
     if (result.hasData) {
-      await db.put(url, data);
+      await db.put(url + page, data);
     }
     return Result(data: data, exception: result.exception);
   }
 
   @override
-  Future<Result<MovieModelDto>> getCachedMovies() async {
-    final result = await db.get(url);
+  Future<Result<MovieModelDto>> getCachedMovies(String page) async {
+    final result = await db.get(url + page);
     return Result(data: result);
   }
 }

@@ -16,7 +16,9 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       );
 
   Future<void> _add(FavouriteAddEvent event, Emitter<FavouriteState> emit) async {
-    final result = await favouriteRepository.add(event.movieModel);
+    List<MovieModel> movies = state.movies;
+    movies.add(event.movieModel);
+    final result = await favouriteRepository.add(movies);
     if (result) {
       emit(state.copyWith(status: FavouriteStateStatus.added, message: "Movie successfully added to favourites!"));
     } else {
@@ -37,11 +39,11 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
 
   Future<void> _remove(FavouriteRemoveEvent event, Emitter<FavouriteState> emit) async {
     emit(state.copyWith(status: FavouriteStateStatus.loading));
-    List<MovieModel> movies = state.movies;
     await Future.delayed(const Duration(milliseconds: 20));
+    List<MovieModel> movies = state.movies;
     movies.removeWhere((movie) => movie.id == event.movieId);
 
-    final result = await favouriteRepository.remove(movies);
+    final result = await favouriteRepository.add(movies);
     if (result == true) {
       emit(state.copyWith(
           status: movies.isEmpty ? FavouriteStateStatus.empty : FavouriteStateStatus.removed,

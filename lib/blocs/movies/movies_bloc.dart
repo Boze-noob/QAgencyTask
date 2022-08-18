@@ -31,7 +31,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
     emit(state.copyWith(status: MoviesStateStatus.loading, genres: event.genres));
 
-    final cachedResult = await moviesRepository.getCachedMovies();
+    final cachedResult = await moviesRepository.getCachedMovies(state.currentPage.toString());
     if (cachedResult.hasData) {
       List<MovieModel> movies = cachedResult.data!.results;
       movies = _getGenresForMovie(event.genres, movies);
