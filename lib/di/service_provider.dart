@@ -27,7 +27,6 @@ abstract class ServiceProvider {
 
   Future<void> initDb() async {
     Box box = await Hive.openBox(Constants.hiveBoxName);
-    //const storage = FlutterSecureStorage();
     db = DbImpl(box: box);
   }
 
