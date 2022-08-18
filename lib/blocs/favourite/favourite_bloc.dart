@@ -38,7 +38,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   Future<void> _remove(FavouriteRemoveEvent event, Emitter<FavouriteState> emit) async {
     emit(state.copyWith(status: FavouriteStateStatus.loading));
     List<MovieModel> movies = state.movies;
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(const Duration(milliseconds: 20));
     movies.removeWhere((movie) => movie.id == event.movieId);
 
     final result = await favouriteRepository.remove(movies);

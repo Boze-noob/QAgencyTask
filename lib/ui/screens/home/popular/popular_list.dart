@@ -26,7 +26,10 @@ class _PopularListState extends State<PopularList> {
       child: SmartRefresher(
         controller: _refreshController,
         onLoading: () => {
-          context.moviesBloc.add(MoviesGetNextPageEvent()),
+          if (context.moviesBloc.state.status != MoviesStateStatus.loadingNewPage)
+            {
+              context.moviesBloc.add(MoviesGetNextPageEvent()),
+            }
         },
         enablePullDown: false,
         enablePullUp: true,
@@ -52,7 +55,7 @@ class _PopularListState extends State<PopularList> {
                     );
                   } else if (state.movies.isEmpty) {
                     return const Text(
-                      "No movies to show!",
+                      "No movies to show",
                       style: TextStyle(fontSize: 20),
                     );
                   }

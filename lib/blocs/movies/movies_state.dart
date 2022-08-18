@@ -1,6 +1,6 @@
 import 'package:q_agency_task/_all.dart';
 
-enum MoviesStateStatus { init, loading, loaded, error }
+enum MoviesStateStatus { init, loading, loadingNewPage, loaded, error }
 
 class MoviesState {
   final MoviesStateStatus status;

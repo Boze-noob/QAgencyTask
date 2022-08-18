@@ -38,7 +38,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       emit(state.copyWith(
           status: MoviesStateStatus.loaded, totalNumOfPages: cachedResult.data?.totalPages, movies: movies));
     }
-    final result = await moviesRepository.getAndCacheMovies(state.currentPage);
+    final result = await moviesRepository.getAndCacheMovies(state.currentPage.toString());
     if (result.hasData) {
       List<MovieModel> movies = result.data!.results;
       movies = _getGenresForMovie(event.genres, movies);
@@ -49,11 +49,12 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   }
 
   Future<void> _getNextPage(MoviesGetNextPageEvent event, Emitter<MoviesState> emit) async {
+    emit(state.copyWith(status: MoviesStateStatus.loadingNewPage));
     int nextPage = state.currentPage + 1;
     if (nextPage > state.totalNumOfPages) {
       emit(state.copyWith(status: MoviesStateStatus.error, message: "All data has been loaded"));
     } else {
-      final result = await moviesRepository.getAndCacheMovies(nextPage);
+      final result = await moviesRepository.getAndCacheMovies(nextPage.toString());
       if (result.hasData) {
         List<MovieModel> movies = result.data!.results;
         movies = state.movies..addAll(_getGenresForMovie(state.genres, movies));

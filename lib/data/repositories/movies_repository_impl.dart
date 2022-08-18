@@ -8,8 +8,9 @@ class MoviesRepositoryImpl implements MoviesRepository {
   MoviesRepositoryImpl({required this.api, required this.db});
 
   @override
-  Future<Result<MovieModelDto>> getAndCacheMovies(int page) async {
-    final result = await api.get(url, {"api_key": Constants.apiKey, 'language': "en_US", 'page': page.toString()});
+  Future<Result<MovieModelDto>> getAndCacheMovies(String page) async {
+    Map<String, dynamic> queryParameters = {"api_key": Constants.apiKey, 'language': "en_US", 'page': page};
+    final result = await api.get(url, queryParameters);
     final data = result.data != null ? MovieModelDto.fromJson(result.data) : null;
     if (result.hasData) {
       await db.put(url, data);
