@@ -73,17 +73,19 @@ class _Image extends StatelessWidget {
   Widget build(BuildContext context) {
     double _height = context.screenHeight / 2.4;
 
-    return SizedBox(
+    return InteractiveViewer(
+      child: CachedNetworkImage(
+        imageUrl: imageUrl.toNetworkImageUrl(),
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        width: context.screenWidth,
         height: _height,
-        child: CachedNetworkImage(
-          imageUrl: imageUrl.toNetworkImageUrl(),
-          fit: BoxFit.cover,
-          width: context.screenWidth,
-          errorWidget: (context, url, err) => Image.asset(
-            AppAssets.logo,
-          ),
-          placeholder: (context, url) => Image.asset(AppAssets.logo),
-        ));
+        errorWidget: (context, url, err) => Image.asset(
+          AppAssets.logo,
+        ),
+        placeholder: (context, url) => Image.asset(AppAssets.logo),
+      ),
+    );
   }
 }
 
@@ -238,6 +240,7 @@ class _Genres extends StatelessWidget {
             Expanded(
               child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
                 builder: (context, state) {
+                  print("Length of genres for this model" + state.movieDetailsModel.genres.length.toString());
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.zero,

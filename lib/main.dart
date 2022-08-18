@@ -4,6 +4,11 @@ import '_all.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(GenreModelAdapter());
+  Hive.registerAdapter(MovieDetailsModelAdapter());
+  Hive.registerAdapter(MovieModelAdapter());
+  Hive.registerAdapter(MovieModelDtoAdapter());
   final ServiceProvider serviceProvider = await resolveServiceProviderFromEnvironment();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
   runApp(MyApp(

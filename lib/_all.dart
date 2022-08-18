@@ -29,3 +29,5 @@ export 'package:dio/dio.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
+export 'package:hive_flutter/hive_flutter.dart';
+export 'package:hive/hive.dart';

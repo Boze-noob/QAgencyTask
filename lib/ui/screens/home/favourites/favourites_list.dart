@@ -46,7 +46,10 @@ class _FavouritesListState extends State<FavouritesList> {
                     );
                   });
             },
-          )
+          ),
+          const SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );

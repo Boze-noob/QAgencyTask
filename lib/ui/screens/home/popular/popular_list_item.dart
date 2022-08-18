@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:q_agency_task/ui/_all.dart';
-import 'package:q_agency_task/ui/screens/common/navigation_scale_transition.dart';
 import '../../../../_all.dart';
 
 class PopularListItem extends StatefulWidget {

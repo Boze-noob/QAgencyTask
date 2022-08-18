@@ -58,7 +58,7 @@ class _ApplicationNavigationWrapperState extends State<ApplicationNavigationWrap
       showInfoMessage("No internet connection!", context, duration: 5);
       final LocalNotification localNotification = LocalNotification();
       localNotification.initialize();
-      localNotification.showNotification(id: 0, title: "Alert!", body: "No internet connection! Please try again.");
+      localNotification.showNotification(id: 0, title: "Alert!", body: "No internet connection! Please connect!");
     }
   }
 }

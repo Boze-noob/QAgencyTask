@@ -18,7 +18,8 @@ class _PopularListState extends State<PopularList> {
         if (state.status == MoviesStateStatus.error) {
           showInfoMessage(state.message ?? "An unexpected error happen, try again later", context);
         }
-        if (state.status == MoviesStateStatus.loaded && _refreshController.isLoading) {
+        if ((state.status == MoviesStateStatus.loaded || state.status == MoviesStateStatus.error) &&
+            _refreshController.isLoading) {
           _refreshController.loadComplete();
         }
       },
@@ -48,6 +49,11 @@ class _PopularListState extends State<PopularList> {
                       width: 100,
                       height: 100,
                       color: context.appTheme.theme.primaryColor,
+                    );
+                  } else if (state.movies.isEmpty) {
+                    return const Text(
+                      "No movies to show!",
+                      style: TextStyle(fontSize: 20),
                     );
                   }
                   return ListView.builder(

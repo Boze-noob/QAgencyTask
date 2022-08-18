@@ -12,16 +12,13 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
   Future<void> _get(GenresEvent event, Emitter<GenresState> emit) async {
     emit(state.copyWith(status: GenresStateStatus.loading));
     final cachedResult = await genresRepository.getCachedGenres();
-    if (cachedResult.hasData) {
-      emit(state.copyWith(status: GenresStateStatus.loaded, genres: cachedResult.data));
-    }
+    emit(state.copyWith(status: GenresStateStatus.loaded, genres: cachedResult.data));
 
     final result = await genresRepository.getAndCacheGenres();
-
-    if (result.hasData) {
-      emit(state.copyWith(status: GenresStateStatus.loaded, genres: result.data));
-    } else {
+    if (result.isError) {
       emit(state.copyWith(status: GenresStateStatus.error, message: result.exception!.message));
+    } else {
+      emit(state.copyWith(status: GenresStateStatus.loaded, genres: result.data));
     }
   }
 }

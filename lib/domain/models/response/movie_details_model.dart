@@ -1,20 +1,37 @@
 import 'package:q_agency_task/_all.dart';
+part 'movie_details_model.g.dart';
 
+@HiveType(typeId: 3)
 class MovieDetailsModel {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   bool? adult;
+  @HiveField(2)
   String? backdropPath;
+  @HiveField(3)
   String posterPath;
+  @HiveField(4)
   String originalTitle;
+  @HiveField(5)
   String? originalLanguage;
+  @HiveField(6)
   String overview;
+  @HiveField(7)
   double voteAverage;
+  @HiveField(8)
   double? popularity;
+  @HiveField(9)
   String? releaseDate;
+  @HiveField(10)
   String title;
+  @HiveField(11)
   bool? video;
+  @HiveField(12)
   int? voteCount;
+  @HiveField(13)
   List<GenreModel> genreList;
+  @HiveField(14)
   List<String> genres = [];
 
   MovieDetailsModel({

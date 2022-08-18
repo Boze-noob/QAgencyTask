@@ -11,7 +11,9 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     on<MoviesGetEvent>(_get);
     on<MoviesGetNextPageEvent>(_getNextPage);
     genresStreamSubscription = genresBloc.stream.listen((state) {
-      add(MoviesGetEvent(genres: state.genres));
+      if (state.status == GenresStateStatus.loaded) {
+        add(MoviesGetEvent(genres: state.genres));
+      }
     });
   }
 
@@ -40,9 +42,9 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     if (result.hasData) {
       List<MovieModel> movies = result.data!.results;
       movies = _getGenresForMovie(event.genres, movies);
-      emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data!.totalPages, movies: movies));
+      emit(state.copyWith(status: MoviesStateStatus.loaded, totalNumOfPages: result.data?.totalPages, movies: movies));
     } else if (result.isError) {
-      emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception!.message));
+      emit(state.copyWith(status: MoviesStateStatus.error, message: result.exception?.message));
     }
   }
 

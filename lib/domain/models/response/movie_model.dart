@@ -1,50 +1,37 @@
-class MovieModelDto {
-  int page;
-  List<MovieModel> results;
-  int totalPages;
-  int totalResults;
+import 'package:q_agency_task/_all.dart';
+part 'movie_model.g.dart';
 
-  MovieModelDto({
-    required this.page,
-    required this.results,
-    required this.totalPages,
-    required this.totalResults,
-  });
-
-  factory MovieModelDto.fromJson(Map<String, dynamic> json) {
-    return MovieModelDto(
-      page: json['page'],
-      results: List<MovieModel>.from(json['results'].map((item) => MovieModel.fromJson(item))),
-      totalPages: json['total_pages'],
-      totalResults: json['total_results'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'page': page,
-      'results': results,
-      'totalPages': totalPages,
-      'totalResults': totalResults,
-    };
-  }
-}
-
+@HiveType(typeId: 2)
 class MovieModel {
+  @HiveField(0)
   bool? adult;
+  @HiveField(1)
   String? backdropPath;
+  @HiveField(2)
   List<int> genreIds;
+  @HiveField(3)
   int id;
+  @HiveField(4)
   String? originalLanguage;
+  @HiveField(5)
   String originalTitle;
+  @HiveField(6)
   String overview;
+  @HiveField(7)
   double? popularity;
+  @HiveField(8)
   String posterPath;
+  @HiveField(9)
   String? releaseDate;
+  @HiveField(10)
   String title;
+  @HiveField(11)
   bool? video;
+  @HiveField(12)
   double voteAverage;
+  @HiveField(13)
   int? voteCount;
+  @HiveField(14)
   List<String> genres;
 
   MovieModel({

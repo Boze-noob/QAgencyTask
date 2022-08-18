@@ -13,17 +13,14 @@ class GenresRepositoryImpl implements GenresRepository {
     final data =
         result.hasData ? List<GenreModel>.from(result.data["genres"].map((item) => GenreModel.fromJson(item))) : null;
     if (result.hasData) {
-      await db.put(url, result.data["genres"]);
+      await db.put(url, data);
     }
     return Result(data: data, exception: result.exception);
   }
 
   @override
   Future<Result<List<GenreModel>?>> getCachedGenres() async {
-    var result = await db.get(url);
-    if (result != null) {
-      result = List<GenreModel>.from(result.map((item) => GenreModel.fromJson(item)));
-    }
-    return Result(data: result);
+    final result = await db.get(url);
+    return Result(data: result != null ? List<GenreModel>.from(result) : result);
   }
 }

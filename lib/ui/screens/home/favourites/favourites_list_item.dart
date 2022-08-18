@@ -3,6 +3,7 @@ import '../../../../_all.dart';
 
 class FavouritesListItem extends StatefulWidget {
   final MovieModel movieModel;
+
   const FavouritesListItem({Key? key, required this.movieModel}) : super(key: key);
 
   @override
@@ -38,7 +39,6 @@ class _FavouritesListItemState extends State<FavouritesListItem> {
                       alignment: Alignment.topRight,
                       child: _FavouriteIcon(
                         movieModel: widget.movieModel,
-                        favourites: state.movies,
                       ));
                 },
               )
@@ -111,10 +111,9 @@ class _Details extends StatelessWidget {
 }
 
 class _FavouriteIcon extends StatefulWidget {
-  List<MovieModel> favourites;
   MovieModel movieModel;
 
-  _FavouriteIcon({Key? key, required this.favourites, required this.movieModel}) : super(key: key);
+  _FavouriteIcon({Key? key, required this.movieModel}) : super(key: key);
 
   @override
   State<_FavouriteIcon> createState() => _FavouriteIconState();
@@ -122,12 +121,6 @@ class _FavouriteIcon extends StatefulWidget {
 
 class _FavouriteIconState extends State<_FavouriteIcon> {
   bool _isSelected = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _isSelected = widget.favourites.any((movie) => movie.id == widget.movieModel.id) ? true : false;
-  }
 
   @override
   Widget build(BuildContext context) {

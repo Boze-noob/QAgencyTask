@@ -12,7 +12,7 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
     final result = await api.get(url, {"api_key": Constants.apiKey, 'language': "en_US"});
     final data = result.data != null ? MovieDetailsModel.fromJson(result.data) : null;
     if (result.hasData) {
-      await db.put(url, result.data);
+      await db.put(url, data);
     }
     return Result(data: data, exception: result.exception);
   }
@@ -21,9 +21,6 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   Future<Result<MovieDetailsModel>> getCachedMovieDetails(int movieId) async {
     final String url = "movie/$movieId";
     var result = await db.get(url);
-    if (result != null) {
-      result = MovieDetailsModel.fromJson(result);
-    }
     return Result(data: result);
   }
 }

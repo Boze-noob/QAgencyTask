@@ -1,5 +1,11 @@
+import 'package:q_agency_task/_all.dart';
+part 'genre_model.g.dart';
+
+@HiveType(typeId: 4)
 class GenreModel {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String name;
 
   GenreModel({required this.id, required this.name});
