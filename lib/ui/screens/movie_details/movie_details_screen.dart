@@ -185,7 +185,7 @@ class _TitleWithActionBtnState extends State<_TitleAndFavouriteIcon> {
         children: [
           Expanded(
             child: Text(
-              widget.movieDetailsModel.originalTitle,
+              widget.movieDetailsModel.title,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
           ),
